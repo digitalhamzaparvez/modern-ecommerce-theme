@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base theme tokens */
+:root {
+  --brand-primary: #2563eb; /* blue-600 */
+}
+
+/* Example component layer */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition-colors;
+  }
+}

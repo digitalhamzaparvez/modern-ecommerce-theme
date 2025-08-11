@@ -1,0 +1,18 @@
+<header class="sticky top-0 z-50 bg-white shadow-sm" x-data>
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="font-semibold">{{ shop.name }}</a>
+      <nav class="hidden md:flex gap-6">
+        <a href="/collections/all" class="hover:text-blue-600">Shop</a>
+        <a href="/blogs/news" class="hover:text-blue-600">Blog</a>
+        <a href="/pages/contact" class="hover:text-blue-600">Contact</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <a href="/account/login" class="hover:text-blue-600">Login</a>
+        <a href="/cart" class="relative">
+          <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-white text-xs" x-text="$store.cart.count">0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -37,26 +37,26 @@
 <main class="max-w-7xl mx-auto px-6 py-8">
   <!-- Breadcrumbs -->
   <nav class="mb-8">
-    {% render 'breadcrumbs' %}
+  {% render 'breadcrumbs' %}
   </nav>
-
+  
   <div class="grid lg:grid-cols-2 gap-12" x-data="productPage()">
     <!-- Product Images -->
     <div class="space-y-4">
       <!-- Main Image -->
-      <div class="aspect-square bg-slate-100 rounded-xl overflow-hidden">
+        <div class="aspect-square bg-slate-100 rounded-xl overflow-hidden">
         <img 
           x-bind:src="selectedImage" 
           alt="{{ product.title }}"
           class="w-full h-full object-cover transition-all duration-300 hover:scale-105"
           loading="eager"
         >
-      </div>
-      
+        </div>
+        
       <!-- Thumbnail Gallery -->
-      {% if product.images.size > 1 %}
-      <div class="grid grid-cols-4 gap-2">
-        {% for image in product.images limit: 4 %}
+        {% if product.images.size > 1 %}
+          <div class="grid grid-cols-4 gap-2">
+            {% for image in product.images limit: 4 %}
         <button 
           @click="selectedImage = '{{ image | img_url: '800x800' }}'"
           class="aspect-square bg-slate-100 rounded-lg overflow-hidden border-2 transition-colors"
@@ -68,12 +68,12 @@
             class="w-full h-full object-cover"
             loading="lazy"
           >
-        </button>
-        {% endfor %}
-      </div>
+              </button>
+            {% endfor %}
+          </div>
       {% endif %}
     </div>
-
+    
     <!-- Product Info -->
     <div class="space-y-6">
       <!-- Title & Rating -->
@@ -81,16 +81,16 @@
         <h1 class="text-3xl font-bold text-slate-800 mb-2">{{ product.title }}</h1>
         <div class="flex items-center space-x-2">
           <div class="flex items-center">
-            {% for i in (1..5) %}
+          {% for i in (1..5) %}
             <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-            {% endfor %}
+          {% endfor %}
           </div>
           <span class="text-slate-600">(4.8) 124 reviews</span>
         </div>
       </div>
-
+      
       <!-- Price -->
       <div class="space-y-2">
         <div class="flex items-center space-x-3">
@@ -103,12 +103,12 @@
           </span>
           <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium">
             Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}
-          </span>
+            </span>
           {% endif %}
         </div>
         <p class="text-green-600 font-medium">✓ Free shipping on orders over $50</p>
       </div>
-
+      
       <!-- Variants -->
       {% if product.variants.size > 1 %}
       <div class="space-y-4">
@@ -125,7 +125,7 @@
               {{ value }}
             </button>
             {% endfor %}
-          </div>
+        </div>
         </div>
         {% endfor %}
       </div>
@@ -157,7 +157,7 @@
           </button>
         </div>
       </div>
-
+      
       <!-- Trust Signals -->
       <div class="grid grid-cols-3 gap-4 py-6 border-t border-b">
         <div class="text-center">
@@ -183,17 +183,17 @@
             </svg>
           </div>
           <p class="text-sm font-medium">Fast Shipping</p>
-        </div>
-      </div>
-
+    </div>
+  </div>
+  
       <!-- Product Description -->
       <div class="prose prose-slate max-w-none">
         <h3>Product Description</h3>
         {{ product.description }}
       </div>
+      </div>
     </div>
-  </div>
-
+    
   <!-- Related Products -->
   {% assign related_products = collections[product.collections.first.handle].products | where: 'id', '!=', product.id | limit: 4 %}
   {% if related_products.size > 0 %}

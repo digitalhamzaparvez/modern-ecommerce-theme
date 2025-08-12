@@ -1,0 +1,169 @@
+{% comment %}
+  Enhanced Product Card Snippet
+  Usage: {% render 'product-card', product: product, view_mode: 'grid' %}
+{% endcomment %}
+
+{% assign view_mode = view_mode | default: 'grid' %}
+
+<div class="product-card group {% if view_mode == 'list' %}flex space-x-4{% endif %} card-premium overflow-hidden h-full">
+  <!-- Product Image -->
+  <div class="{% if view_mode == 'list' %}w-48 flex-shrink-0{% endif %} relative overflow-hidden {% if view_mode == 'grid' %}aspect-square{% else %}aspect-[4/3]{% endif %} bg-slate-100">
+    <a href="{{ product.url }}" class="block w-full h-full">
+      {% if product.featured_image %}
+        <img 
+          data-src="{{ product.featured_image | img_url: '400x400' }}"
+          src="{{ product.featured_image | img_url: '50x50' }}"
+          alt="{{ product.featured_image.alt | default: product.title }}"
+          class="lazy w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          width="400"
+          height="400"
+        >
+      {% else %}
+        <div class="w-full h-full flex items-center justify-center bg-slate-200">
+          <svg class="w-16 h-16 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2v12a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+      {% endif %}
+    </a>
+    
+    <!-- Quick Actions Overlay -->
+    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2">
+      <!-- Quick Add -->
+      {% if product.available %}
+      <button 
+        data-quick-add
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+        class="bg-white text-slate-800 p-2 rounded-full hover:bg-amber-50 hover:text-amber-600 transition-colors"
+        title="Quick Add"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h12M9 19v2m4-2v2"></path>
+        </svg>
+      </button>
+      {% endif %}
+      
+      <!-- Quick View -->
+      <button 
+        data-quick-view="{{ product.id }}"
+        class="bg-white text-slate-800 p-2 rounded-full hover:bg-amber-50 hover:text-amber-600 transition-colors"
+        title="Quick View"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        </svg>
+      </button>
+      
+      <!-- Wishlist -->
+      <button 
+        data-wishlist="{{ product.id }}"
+        class="bg-white text-slate-800 p-2 rounded-full hover:bg-amber-50 hover:text-red-500 transition-colors"
+        title="Add to Wishlist"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Sale Badge -->
+    {% if product.compare_at_price > product.price %}
+    <div class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+      {% assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
+      -{{ discount }}%
+    </div>
+    {% endif %}
+    
+    <!-- Stock Badge -->
+    {% unless product.available %}
+    <div class="absolute top-3 right-3 bg-slate-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+      Sold Out
+    </div>
+    {% endunless %}
+  </div>
+  
+  <!-- Product Info -->
+  <div class="{% if view_mode == 'grid' %}p-4{% else %}flex-1 py-4{% endif %} space-y-2">
+    <!-- Vendor -->
+    {% if product.vendor != blank %}
+    <p class="text-xs text-slate-500 uppercase tracking-wide">{{ product.vendor }}</p>
+    {% endif %}
+    
+    <!-- Title -->
+    <h3 class="{% if view_mode == 'grid' %}text-lg{% else %}text-xl{% endif %} font-semibold text-slate-800 group-hover:text-amber-600 transition-colors">
+      <a href="{{ product.url }}" class="line-clamp-2">{{ product.title }}</a>
+    </h3>
+    
+    <!-- Rating -->
+    <div class="flex items-center space-x-1">
+      {% for i in (1..5) %}
+      <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      {% endfor %}
+      <span class="text-sm text-slate-500">(4.8)</span>
+    </div>
+    
+    <!-- Description (List view only) -->
+    {% if view_mode == 'list' and product.description != blank %}
+    <p class="text-slate-600 text-sm line-clamp-3">
+      {{ product.description | strip_html | truncate: 150 }}
+    </p>
+    {% endif %}
+    
+    <!-- Price -->
+    <div class="flex items-center space-x-2">
+      <span class="{% if view_mode == 'grid' %}text-lg{% else %}text-xl{% endif %} font-bold text-slate-800">
+        {{ product.price | money }}
+      </span>
+      {% if product.compare_at_price > product.price %}
+      <span class="text-sm text-slate-500 line-through">
+        {{ product.compare_at_price | money }}
+      </span>
+      {% endif %}
+    </div>
+    
+    <!-- Variants Preview -->
+    {% if product.options_with_values.size > 0 and view_mode == 'list' %}
+    <div class="flex flex-wrap gap-1">
+      {% assign color_option = product.options_with_values | where: 'name', 'Color' | first %}
+      {% if color_option %}
+        {% for value in color_option.values limit: 4 %}
+        <div class="w-6 h-6 rounded-full border-2 border-slate-200" style="background-color: {{ value | downcase }}" title="{{ value }}"></div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+    
+    <!-- Actions (List view only) -->
+    {% if view_mode == 'list' %}
+    <div class="flex items-center space-x-3 pt-2">
+      {% if product.available %}
+      <button 
+        data-quick-add
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+        class="btn-premium flex-1"
+      >
+        Add to Cart
+      </button>
+      {% else %}
+      <button class="btn-premium opacity-50 cursor-not-allowed flex-1" disabled>
+        Sold Out
+      </button>
+      {% endif %}
+      
+      <button 
+        data-wishlist="{{ product.id }}"
+        class="btn-premium-outline p-2"
+        title="Add to Wishlist"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+        </svg>
+      </button>
+    </div>
+    {% endif %}
+  </div>
+</div>

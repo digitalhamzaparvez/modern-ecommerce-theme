@@ -1,0 +1,27 @@
+{% if collection.filters.size > 0 %}
+<aside class="mb-6">
+  <details open class="bg-white rounded-lg shadow-sm">
+    <summary class="px-4 py-3 font-medium cursor-pointer">Filters</summary>
+    <div class="p-4 grid md:grid-cols-2 gap-6">
+      {% for filter in collection.filters %}
+        <div>
+          <h4 class="text-sm font-medium mb-2">{{ filter.label }}</h4>
+          <ul class="space-y-2">
+            {% for value in filter.values %}
+              <li>
+                {% if value.active %}
+                  <a href="{{ value.url_to_remove }}" class="text-blue-600">{{ value.label }} ×</a>
+                {% elsif value.count > 0 %}
+                  <a href="{{ value.url_to_add }}" class="hover:underline">{{ value.label }} ({{ value.count }})</a>
+                {% else %}
+                  <span class="text-gray-400">{{ value.label }}</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </details>
+</aside>
+{% endif %}

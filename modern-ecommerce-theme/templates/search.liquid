@@ -1,0 +1,355 @@
+{% section 'header' %}
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+  <!-- Breadcrumbs -->
+  <nav class="mb-8">
+    {% render 'breadcrumbs' %}
+  </nav>
+
+  <!-- Search Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-800 mb-4">
+      {% if search.performed %}
+        Search Results
+        {% if search.terms %}
+          for "{{ search.terms }}"
+        {% endif %}
+      {% else %}
+        Search
+      {% endif %}
+    </h1>
+    
+    <!-- Enhanced Search Form -->
+    <form action="/search" method="get" class="max-w-2xl">
+      <div class="relative">
+        <input 
+          type="search" 
+          name="q" 
+          value="{{ search.terms | escape }}"
+          placeholder="Search products, articles, and more..."
+          class="w-full px-6 py-4 pl-12 pr-20 text-lg border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+          autofocus
+        >
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center">
+          <svg class="h-6 w-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <button 
+          type="submit"
+          class="absolute inset-y-0 right-0 px-6 bg-amber-500 text-white rounded-r-xl hover:bg-amber-600 transition-colors"
+        >
+          Search
+        </button>
+      </div>
+      
+      <!-- Search Filters -->
+      <div class="mt-4 flex flex-wrap gap-2">
+        <input type="hidden" name="type" value="{{ search.types | join: ',' }}">
+        <button 
+          type="button" 
+          onclick="toggleSearchType('product')"
+          class="search-filter px-4 py-2 rounded-full text-sm border transition-colors"
+          data-type="product"
+        >
+          Products
+        </button>
+        <button 
+          type="button" 
+          onclick="toggleSearchType('article')"
+          class="search-filter px-4 py-2 rounded-full text-sm border transition-colors"
+          data-type="article"
+        >
+          Articles
+        </button>
+        <button 
+          type="button" 
+          onclick="toggleSearchType('page')"
+          class="search-filter px-4 py-2 rounded-full text-sm border transition-colors"
+          data-type="page"
+        >
+          Pages
+        </button>
+      </div>
+    </form>
+  </div>
+
+  {% if search.performed %}
+    <!-- Search Results -->
+    {% if search.results.size > 0 %}
+      <div class="mb-6">
+        <p class="text-slate-600">
+          Showing {{ search.results.size }} of {{ search.results_count }} results
+          {% if search.terms %}
+            for "<span class="font-medium text-slate-800">{{ search.terms }}</span>"
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="space-y-8">
+        {% assign products = search.results | where: 'object_type', 'product' %}
+        {% assign articles = search.results | where: 'object_type', 'article' %}
+        {% assign pages = search.results | where: 'object_type', 'page' %}
+
+        <!-- Products Section -->
+        {% if products.size > 0 %}
+        <section>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold text-slate-800">
+              Products ({{ products.size }})
+            </h2>
+            {% if products.size > 4 %}
+            <a href="/search?q={{ search.terms | url_param_escape }}&type=product" class="text-amber-600 hover:text-amber-700 font-medium">
+              View All Products →
+            </a>
+            {% endif %}
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in products limit: 4 %}
+              {% render 'product-card', product: product %}
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
+
+        <!-- Articles Section -->
+        {% if articles.size > 0 %}
+        <section>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold text-slate-800">
+              Articles ({{ articles.size }})
+            </h2>
+            {% if articles.size > 3 %}
+            <a href="/search?q={{ search.terms | url_param_escape }}&type=article" class="text-amber-600 hover:text-amber-700 font-medium">
+              View All Articles →
+            </a>
+            {% endif %}
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for article in articles limit: 3 %}
+            <article class="card-premium overflow-hidden">
+              {% if article.image %}
+              <div class="aspect-video bg-slate-100 overflow-hidden">
+                <img 
+                  src="{{ article.image | img_url: '400x225' }}" 
+                  alt="{{ article.title }}"
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                >
+              </div>
+              {% endif %}
+              
+              <div class="p-6">
+                <div class="flex items-center space-x-2 text-sm text-slate-500 mb-2">
+                  <span>{{ article.published_at | date: '%B %d, %Y' }}</span>
+                  <span>•</span>
+                  <span>{{ article.author }}</span>
+                </div>
+                
+                <h3 class="text-lg font-semibold text-slate-800 mb-2">
+                  <a href="{{ article.url }}" class="hover:text-amber-600 transition-colors">
+                    {{ article.title }}
+                  </a>
+                </h3>
+                
+                <p class="text-slate-600 text-sm mb-4 line-clamp-3">
+                  {{ article.excerpt | default: article.content | strip_html | truncate: 150 }}
+                </p>
+                
+                <a 
+                  href="{{ article.url }}" 
+                  class="text-amber-600 hover:text-amber-700 font-medium text-sm"
+                >
+                  Read More →
+                </a>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
+
+        <!-- Pages Section -->
+        {% if pages.size > 0 %}
+        <section>
+          <h2 class="text-2xl font-semibold text-slate-800 mb-6">
+            Pages ({{ pages.size }})
+          </h2>
+          
+          <div class="space-y-4">
+            {% for page in pages %}
+            <div class="card-premium p-6">
+              <h3 class="text-xl font-semibold text-slate-800 mb-2">
+                <a href="{{ page.url }}" class="hover:text-amber-600 transition-colors">
+                  {{ page.title }}
+                </a>
+              </h3>
+              <p class="text-slate-600 mb-3">
+                {{ page.content | strip_html | truncate: 200 }}
+              </p>
+              <a 
+                href="{{ page.url }}" 
+                class="text-amber-600 hover:text-amber-700 font-medium"
+              >
+                Visit Page →
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
+      </div>
+
+      <!-- Pagination -->
+      {% if paginate.pages > 1 %}
+      <nav class="mt-12 flex justify-center">
+        <div class="flex items-center space-x-2">
+          {% if paginate.previous %}
+          <a 
+            href="{{ paginate.previous.url }}" 
+            class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors"
+          >
+            Previous
+          </a>
+          {% endif %}
+          
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+            <a 
+              href="{{ part.url }}" 
+              class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors"
+            >
+              {{ part.title }}
+            </a>
+            {% else %}
+              {% if part.title == paginate.current_page %}
+              <span class="px-3 py-2 rounded-lg bg-amber-500 text-white font-medium">
+                {{ part.title }}
+              </span>
+              {% else %}
+              <span class="px-3 py-2 text-slate-400">{{ part.title }}</span>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          
+          {% if paginate.next %}
+          <a 
+            href="{{ paginate.next.url }}" 
+            class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors"
+          >
+            Next
+          </a>
+          {% endif %}
+        </div>
+      </nav>
+      {% endif %}
+
+    {% else %}
+      <!-- No Results -->
+      <div class="text-center py-16">
+        <svg class="w-20 h-20 text-slate-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        
+        <h2 class="text-2xl font-semibold text-slate-800 mb-4">No results found</h2>
+        <p class="text-slate-600 mb-8 max-w-md mx-auto">
+          We couldn't find anything matching your search. Try different keywords or browse our categories.
+        </p>
+        
+        <div class="space-y-4">
+          <a href="/collections/all" class="btn-premium inline-flex items-center">
+            Browse All Products
+          </a>
+          
+          <!-- Search Suggestions -->
+          <div class="mt-8">
+            <p class="text-sm text-slate-600 mb-4">Popular searches:</p>
+            <div class="flex flex-wrap justify-center gap-2">
+              {% assign popular_searches = 'fitness,wellness,pet care,home decor,beauty' | split: ',' %}
+              {% for term in popular_searches %}
+              <a 
+                href="/search?q={{ term | url_param_escape }}" 
+                class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm hover:bg-amber-100 hover:text-amber-700 transition-colors"
+              >
+                {{ term }}
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <!-- Search Landing -->
+    <div class="text-center py-16">
+      <svg class="w-20 h-20 text-slate-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      
+      <h2 class="text-2xl font-semibold text-slate-800 mb-4">What are you looking for?</h2>
+      <p class="text-slate-600 mb-8 max-w-md mx-auto">
+        Search through our products, articles, and pages to find exactly what you need.
+      </p>
+      
+      <!-- Popular Categories -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        {% assign featured_collections = collections['health-wellness,pet-products,home-garden,beauty-care'] | split: ',' %}
+        {% for collection_handle in featured_collections %}
+          {% assign collection = collections[collection_handle] %}
+          {% if collection %}
+          <a href="{{ collection.url }}" class="card-premium p-6 text-center hover:shadow-lg transition-shadow">
+            <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-800">{{ collection.title }}</h3>
+            <p class="text-sm text-slate-600 mt-2">{{ collection.products_count }} products</p>
+          </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</main>
+
+<script>
+  function toggleSearchType(type) {
+    const typeInput = document.querySelector('input[name="type"]');
+    const button = document.querySelector(`[data-type="${type}"]`);
+    
+    let currentTypes = typeInput.value ? typeInput.value.split(',') : [];
+    
+    if (currentTypes.includes(type)) {
+      currentTypes = currentTypes.filter(t => t !== type);
+      button.classList.remove('bg-amber-100', 'border-amber-300', 'text-amber-700');
+      button.classList.add('border-slate-300', 'text-slate-700');
+    } else {
+      currentTypes.push(type);
+      button.classList.add('bg-amber-100', 'border-amber-300', 'text-amber-700');
+      button.classList.remove('border-slate-300', 'text-slate-700');
+    }
+    
+    typeInput.value = currentTypes.join(',');
+  }
+  
+  // Initialize filter buttons based on current search
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const types = urlParams.get('type');
+    
+    if (types) {
+      types.split(',').forEach(type => {
+        const button = document.querySelector(`[data-type="${type}"]`);
+        if (button) {
+          button.classList.add('bg-amber-100', 'border-amber-300', 'text-amber-700');
+        }
+      });
+    }
+  });
+</script>
+
+{% section 'footer' %}

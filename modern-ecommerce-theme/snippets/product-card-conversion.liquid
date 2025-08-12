@@ -1,0 +1,77 @@
+<div class="group card-premium overflow-hidden relative">
+  <!-- Sale badge -->
+  {% if product.compare_at_price > product.price %}
+    <div class="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+      SAVE {{ product.compare_at_price | minus: product.price | money }}
+    </div>
+  {% endif %}
+  
+  <!-- Best seller badge -->
+  {% if product.tags contains 'bestseller' %}
+    <div class="absolute top-3 right-3 z-10 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+      BESTSELLER
+    </div>
+  {% endif %}
+  
+  <a href="{{ product.url }}" class="block aspect-square bg-slate-100 overflow-hidden relative">
+    {% assign featured = product.featured_image | default: product.images.first %}
+    {% if featured %}
+      <img src="{{ featured | img_url: '540x540' }}" alt="{{ product.title | escape }}" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+    {% endif %}
+    
+    <!-- Quick view overlay -->
+    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+      <button class="opacity-0 group-hover:opacity-100 btn-premium text-sm transition-opacity duration-300" data-quick-view data-product-handle="{{ product.handle }}">
+        Quick View
+      </button>
+    </div>
+  </a>
+  
+  <div class="p-6">
+    <a href="{{ product.url }}" class="block">
+      <h3 class="font-semibold text-premium line-clamp-2 group-hover:text-amber-600 transition-colors">{{ product.title }}</h3>
+      
+      <!-- Reviews stars -->
+      <div class="flex items-center mt-1 space-x-1">
+        {% for i in (1..5) %}
+          <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        {% endfor %}
+        <span class="text-xs text-slate-500">(247)</span>
+      </div>
+      
+      <!-- Price with comparison -->
+      <div class="mt-2 flex items-center space-x-2">
+        <span class="text-lg font-bold text-amber-600">{{ product.price | money }}</span>
+        {% if product.compare_at_price > product.price %}
+          <span class="text-sm text-slate-500 line-through">{{ product.compare_at_price | money }}</span>
+          <span class="text-sm text-red-600 font-medium">
+            {% assign savings = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+            {{ savings }}% OFF
+          </span>
+        {% endif %}
+      </div>
+    </a>
+    
+    <!-- Stock indicator -->
+    <div class="mt-2 flex items-center space-x-1">
+      <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+      <span class="text-xs text-slate-600">In stock - ships today</span>
+    </div>
+    
+    <!-- Action buttons -->
+    <div class="mt-4 space-y-2">
+      {% assign first_variant = product.variants.first %}
+      {% if first_variant %}
+        <button class="btn-premium w-full text-sm" data-quick-add data-variant-id="{{ first_variant.id }}">
+          Add to Cart - {{ product.price | money }}
+        </button>
+      {% endif %}
+      <div class="flex gap-2">
+        <button class="btn-premium-outline text-xs flex-1" data-quick-view data-product-handle="{{ product.handle }}">Quick View</button>
+        <button class="btn-premium-outline text-xs flex-1">Add to Wishlist</button>
+      </div>
+    </div>
+  </div>
+</div>

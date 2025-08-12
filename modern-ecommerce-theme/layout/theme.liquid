@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- SEO Meta Tags -->
+    <title>{% if page_title %}{{ page_title }} | {% endif %}{{ shop.name }}</title>
+    <meta name="description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}{{ shop.description | strip_html | truncate: 160 }}{% endif %}">
+    <meta name="keywords" content="{% if product %}{{ product.tags | join: ', ' }}{% endif %}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ canonical_url }}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}{{ shop.name }}{% endif %}">
+    <meta property="og:description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}{{ shop.description | strip_html | truncate: 160 }}{% endif %}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:image" content="{% if page_image %}{{ page_image | img_url: '1200x630' }}{% else %}{{ 'og-image.jpg' | asset_url }}{% endif %}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% if page_title %}{{ page_title }}{% else %}{{ shop.name }}{% endif %}">
+    <meta name="twitter:description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}{{ shop.description | strip_html | truncate: 160 }}{% endif %}">
+    
+    <!-- Performance Optimizations -->
+    <link rel="preload" href="{{ 'main.css' | asset_url }}" as="style">
+    <link rel="preload" href="{{ 'main.js' | asset_url }}" as="script">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdn.shopify.com">
+    
+    <!-- Structured Data - Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "{{ shop.name }}",
+      "url": "{{ shop.url }}",
+      "description": "{{ shop.description | strip_html }}",
+      "sameAs": [
+        "{{ settings.social_facebook_link }}",
+        "{{ settings.social_instagram_link }}",
+        "{{ settings.social_twitter_link }}"
+      ]
+    }
+    </script>
+    
+    {{ content_for_header }}
+    <link href="{{ 'main.css' | asset_url }}" rel="stylesheet">
+    
+    <!-- Google Analytics 4 -->
+    {% if settings.google_analytics_id != blank %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.google_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ settings.google_analytics_id }}', {
+        send_page_view: false,
+        custom_map: {
+          'custom_parameter_1': 'page_title'
+        }
+      });
+      
+      // Enhanced ecommerce tracking
+      gtag('config', '{{ settings.google_analytics_id }}', {
+        custom_map: {'custom_parameter_1': 'page_title'},
+        send_page_view: false
+      });
+    </script>
+    {% endif %}
+    
+    <!-- Facebook Pixel -->
+    {% if settings.facebook_pixel_id != blank %}
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '{{ settings.facebook_pixel_id }}');
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none" 
+           src="https://www.facebook.com/tr?id={{ settings.facebook_pixel_id }}&ev=PageView&noscript=1"/>
+    </noscript>
+    {% endif %}
+  </head>
+  <body class="scroll-smooth">
+    {% section 'cart-drawer' %}
+    {% section 'quick-view-modal' %}
+    {% render 'quick-view-modal' %}
+    {{ content_for_layout }}
+    
+    <!-- Floating CTA -->
+    <div x-data="{ show: false }" 
+         x-init="setTimeout(() => show = true, 5000)"
+         x-show="show"
+         x-transition
+         class="floating-cta no-print">
+      <a href="/collections/all" class="flex items-center space-x-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+        </svg>
+        <span>Shop Now</span>
+      </a>
+    </div>
+    
+    <script src="{{ 'main.js' | asset_url }}" type="module"></script>
+    
+    <!-- Shopify Analytics -->
+    <script>
+      window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+      window.ShopifyAnalytics.meta = window.ShopifyAnalytics.meta || {};
+      window.ShopifyAnalytics.meta.currency = '{{ cart.currency.iso_code }}';
+      
+      // Track page views
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'page_view', {
+          page_title: document.title,
+          page_location: window.location.href,
+          content_group1: '{{ template | split: '.' | first }}',
+          custom_parameter_1: document.title
+        });
+      }
+      
+      // Track product views
+      {% if template contains 'product' %}
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'view_item', {
+          currency: '{{ cart.currency.iso_code }}',
+          value: {{ product.price | money_without_currency }},
+          items: [{
+            item_id: '{{ product.id }}',
+            item_name: '{{ product.title | strip_html | escape }}',
+            category: '{{ product.type }}',
+            quantity: 1,
+            price: {{ product.price | money_without_currency }}
+          }]
+        });
+      }
+      
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'ViewContent', {
+          content_ids: ['{{ product.id }}'],
+          content_type: 'product',
+          value: {{ product.price | money_without_currency }},
+          currency: '{{ cart.currency.iso_code }}'
+        });
+      }
+      {% endif %}
+    </script>
+  </body>
+</html>

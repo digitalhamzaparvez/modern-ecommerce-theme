@@ -1,0 +1,299 @@
+{% section 'header' %}
+
+<!-- Blog Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "{{ blog.title }}",
+  "description": "{{ blog.description | default: blog.title | strip_html | truncate: 160 }}",
+  "url": "{{ blog.url | prepend: request.host }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ shop.name }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ 'logo.png' | asset_url }}"
+    }
+  }
+}
+</script>
+
+<main class="min-h-screen bg-gradient-to-b from-white to-slate-50">
+  <!-- Blog Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-24">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(245,158,11,0.1),_transparent_70%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(245,158,11,0.1),_transparent_70%)]"></div>
+    
+    <div class="relative mx-auto max-w-7xl px-6">
+      <div class="max-w-3xl">
+        <!-- Premium Badge -->
+        <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8">
+          <div class="w-2 h-2 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full"></div>
+          <span class="text-sm font-semibold tracking-widest uppercase">PeakWares Journal</span>
+        </div>
+        
+        <h1 class="text-5xl lg:text-6xl font-light leading-tight tracking-tight mb-6">
+          Insights &
+          <span class="block font-bold bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent">
+            Inspiration
+          </span>
+        </h1>
+        
+        <p class="text-xl lg:text-2xl text-slate-300 leading-relaxed font-light">
+          Discover curated articles on luxury lifestyle, premium trends, and expert insights from the world of PeakWares.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Content -->
+  <section class="py-24">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Main Content -->
+        <div class="lg:col-span-2">
+          <!-- Featured Article -->
+          {% assign featured_article = blog.articles.first %}
+          {% if featured_article %}
+          <article class="card-premium overflow-hidden hover-lift mb-16">
+            {% if featured_article.image %}
+            <div class="aspect-[2/1] bg-slate-100 overflow-hidden">
+              <a href="{{ featured_article.url }}">
+                <img 
+                  src="{{ featured_article.image | img_url: '1200x600' }}" 
+                  alt="{{ featured_article.title }}"
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                >
+              </a>
+            </div>
+            {% endif %}
+            
+            <div class="p-8">
+              <!-- Article Meta -->
+              <div class="flex items-center space-x-4 text-sm text-slate-500 mb-4">
+                <time datetime="{{ featured_article.published_at | date: '%Y-%m-%d' }}">
+                  {{ featured_article.published_at | date: '%B %d, %Y' }}
+                </time>
+                <span>•</span>
+                <span>{{ featured_article.author }}</span>
+                {% if featured_article.tags.size > 0 %}
+                <span>•</span>
+                <div class="flex items-center space-x-2">
+                  {% for tag in featured_article.tags limit: 1 %}
+                  <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="text-amber-600 hover:text-amber-700">
+                    {{ tag }}
+                  </a>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Article Content -->
+              <h2 class="text-3xl font-semibold text-slate-900 mb-4">
+                <a href="{{ featured_article.url }}" class="hover:text-amber-600 transition-colors">
+                  {{ featured_article.title }}
+                </a>
+              </h2>
+              
+              <p class="text-slate-600 mb-6 line-clamp-3">
+                {{ featured_article.excerpt | default: featured_article.content | strip_html | truncate: 200 }}
+              </p>
+              
+              <a href="{{ featured_article.url }}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                Read Article
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+          {% endif %}
+
+          <!-- Article Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% for article in blog.articles offset: 1 %}
+            <article class="card-premium overflow-hidden hover-lift">
+              {% if article.image %}
+              <div class="aspect-[3/2] bg-slate-100 overflow-hidden">
+                <a href="{{ article.url }}">
+                  <img 
+                    src="{{ article.image | img_url: '600x400' }}" 
+                    alt="{{ article.title }}"
+                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  >
+                </a>
+              </div>
+              {% endif %}
+              
+              <div class="p-6">
+                <!-- Article Meta -->
+                <div class="flex items-center space-x-2 text-sm text-slate-500 mb-3">
+                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{ article.published_at | date: '%B %d, %Y' }}
+                  </time>
+                  {% if article.tags.size > 0 %}
+                  <span>•</span>
+                  <a href="{{ blog.url }}/tagged/{{ article.tags.first | handle }}" class="text-amber-600 hover:text-amber-700">
+                    {{ article.tags.first }}
+                  </a>
+                  {% endif %}
+                </div>
+
+                <!-- Article Content -->
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">
+                  <a href="{{ article.url }}" class="hover:text-amber-600 transition-colors">
+                    {{ article.title }}
+                  </a>
+                </h3>
+                
+                <p class="text-slate-600 mb-4 line-clamp-2">
+                  {{ article.excerpt | default: article.content | strip_html | truncate: 120 }}
+                </p>
+                
+                <a href="{{ article.url }}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium text-sm">
+                  Continue Reading
+                  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                  </svg>
+                </a>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+
+          <!-- Pagination -->
+          {% if paginate.pages > 1 %}
+          <nav class="mt-12 flex justify-center">
+            <div class="flex items-center space-x-2">
+              {% if paginate.previous %}
+              <a 
+                href="{{ paginate.previous.url }}" 
+                class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                Previous
+              </a>
+              {% endif %}
+              
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                <a 
+                  href="{{ part.url }}" 
+                  class="px-3 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                >
+                  {{ part.title }}
+                </a>
+                {% else %}
+                  {% if part.title == paginate.current_page %}
+                  <span class="px-3 py-2 bg-amber-500 text-white rounded-lg font-medium">
+                    {{ part.title }}
+                  </span>
+                  {% else %}
+                  <span class="px-3 py-2 text-slate-400">{{ part.title }}</span>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              
+              {% if paginate.next %}
+              <a 
+                href="{{ paginate.next.url }}" 
+                class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                Next
+              </a>
+              {% endif %}
+            </div>
+          </nav>
+          {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="space-y-8">
+          <!-- Search -->
+          <div class="card-premium p-6">
+            <h3 class="font-semibold text-slate-900 mb-4">Search Articles</h3>
+            <form action="/search" method="get" class="relative">
+              <input 
+                type="search" 
+                name="q" 
+                placeholder="Search articles..."
+                class="w-full px-4 py-3 pl-10 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              >
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+            </form>
+          </div>
+
+          <!-- Categories -->
+          {% if blog.all_tags.size > 0 %}
+          <div class="card-premium p-6">
+            <h3 class="font-semibold text-slate-900 mb-4">Categories</h3>
+            <div class="space-y-2">
+              {% for tag in blog.all_tags %}
+              <a 
+                href="{{ blog.url }}/tagged/{{ tag | handle }}" 
+                class="block text-slate-600 hover:text-amber-600 transition-colors"
+              >
+                {{ tag }}
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Featured Products -->
+          {% assign featured_products = collections.all.products | limit: 3 %}
+          {% if featured_products.size > 0 %}
+          <div class="card-premium p-6">
+            <h3 class="font-semibold text-slate-900 mb-4">Featured Products</h3>
+            <div class="space-y-4">
+              {% for product in featured_products %}
+              <a href="{{ product.url }}" class="flex items-center space-x-4 group">
+                <div class="w-16 h-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+                  {% if product.featured_image %}
+                  <img 
+                    src="{{ product.featured_image | img_url: '100x100' }}" 
+                    alt="{{ product.title }}"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  >
+                  {% endif %}
+                </div>
+                <div>
+                  <h4 class="font-medium text-slate-900 group-hover:text-amber-600 transition-colors">
+                    {{ product.title }}
+                  </h4>
+                  <p class="text-amber-600 text-sm">{{ product.price | money }}</p>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Newsletter -->
+          <div class="card-premium p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+            <h3 class="font-semibold mb-4">Subscribe to Our Newsletter</h3>
+            <p class="text-slate-300 text-sm mb-4">
+              Get the latest articles and exclusive offers delivered to your inbox.
+            </p>
+            <form class="space-y-3">
+              <input 
+                type="email" 
+                placeholder="Enter your email"
+                class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              >
+              <button type="submit" class="w-full btn-premium">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% section 'footer' %}

@@ -86,7 +86,7 @@
                   </a>
                   {% endfor %}
                 </div>
-                {% endif %}
+    {% endif %}
               </div>
 
               <!-- Article Content -->
@@ -114,7 +114,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {% for article in blog.articles offset: 1 %}
             <article class="card-premium overflow-hidden hover-lift">
-              {% if article.image %}
+          {% if article.image %}
               <div class="aspect-[3/2] bg-slate-100 overflow-hidden">
                 <a href="{{ article.url }}">
                   <img 
@@ -266,10 +266,10 @@
                     {{ product.title }}
                   </h4>
                   <p class="text-amber-600 text-sm">{{ product.price | money }}</p>
-                </div>
-              </a>
-              {% endfor %}
-            </div>
+          </div>
+        </a>
+    {% endfor %}
+  </div>
           </div>
           {% endif %}
 
@@ -292,7 +292,7 @@
           </div>
         </aside>
       </div>
-    </div>
+  </div>
   </section>
 </main>
 

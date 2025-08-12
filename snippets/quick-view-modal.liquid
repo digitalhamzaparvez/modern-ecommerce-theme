@@ -1,0 +1,50 @@
+<div id="quick-view" x-data="quickView()" x-cloak class="fixed inset-0 hidden items-center justify-center bg-black/50">
+  <div class="bg-white rounded-lg max-w-2xl w-full overflow-hidden">
+    <div class="flex items-center justify-between p-4 border-b">
+      <h3 class="font-semibold" x-text="product.title"></h3>
+      <button @click="close" class="text-gray-500 hover:text-gray-700">Close</button>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6 p-4">
+      <img :src="image" alt="" class="rounded-lg">
+      <div>
+        <div class="text-lg font-medium mb-3" x-text="price"></div>
+        <button class="btn-primary" @click="addToCart">Add to cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function quickView() {
+    return {
+      open: false,
+      product: {},
+      image: '',
+      price: '',
+      async show(handle) {
+        const data = await (await fetch(`/products/${handle}.js`)).json()
+        this.product = data
+        this.image = data?.images?.[0] || ''
+        this.price = Shopify.formatMoney(data?.price || 0)
+        this.open = true
+        this.$el.classList.remove('hidden')
+      },
+      close() { this.open = false; this.$el.classList.add('hidden') },
+      async addToCart() {
+        if (!this.product?.variants?.[0]) return
+        await fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: this.product.variants[0].id, quantity: 1 }) })
+        this.close()
+      }
+    }
+  }
+
+  document.addEventListener('alpine:init', () => {
+    const root = document.getElementById('quick-view')
+    document.body.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-quick-view]')
+      if (btn && root && root.__x) {
+        e.preventDefault()
+        root.__x.$data.show(btn.getAttribute('data-product-handle'))
+      }
+    })
+  })
+</script>

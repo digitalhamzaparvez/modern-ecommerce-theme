@@ -13,8 +13,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["assets/scripts/*"]
-    }
+    },
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
   },
-  "include": ["assets/scripts/**/*", "**/*.ts"],
+  "include": ["assets/scripts/**/*", "**/*.ts", "**/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,5 +1,7 @@
-<section class="prose max-w-none">
-  <h1 class="text-3xl font-bold">Welcome to {{ shop.name }}</h1>
-  <p class="mt-2 text-gray-700">Start building your modern Ecommerce storefront.</p>
-  <a href="/collections/all" class="btn-primary mt-4 inline-block">Shop Now</a>
-</section>
+{% section 'header' %}
+<main class="mx-auto max-w-7xl px-4 py-8 space-y-10">
+  {% section 'hero' %}
+  {% section 'testimonials' %}
+  {% section 'blog-posts' %}
+</main>
+{% section 'footer' %}

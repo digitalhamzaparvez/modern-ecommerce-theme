@@ -5,9 +5,29 @@
         <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
         </svg>
-        <span>🔥 Limited Time: Free shipping on all orders + 20% off your first purchase!</span>
-        <span class="hidden md:inline">Use code: WELCOME20</span>
+        <span>🔥 {{ section.settings.message | default: "Limited Time: Free shipping on all orders + 20% off your first purchase!" }}</span>
+        <span class="hidden md:inline">{{ section.settings.code | default: "Use code: WELCOME20" }}</span>
       </div>
     </div>
   </div>
 </section>
+
+{% schema %}
+{
+  "name": "Urgency Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Urgency Message",
+      "default": "Limited Time: Free shipping on all orders + 20% off your first purchase!"
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Promo Code",
+      "default": "Use code: WELCOME20"
+    }
+  ]
+}
+{% endschema %}

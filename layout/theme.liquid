@@ -62,10 +62,15 @@
       }
     </style>
     
+    <!-- Tailwind CSS CDN for immediate styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <!-- Performance Optimizations -->
-    <link rel="preload" href="{{ 'styles/main.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="{{ 'styles/main.css' | asset_url }}"></noscript>
-    <link rel="preload" href="{{ 'scripts/main.js' | asset_url }}" as="script">
+    <link rel="stylesheet" href="{{ 'main.css' | asset_url }}">
+    <link rel="preload" href="{{ 'main.js' | asset_url }}" as="script">
     
     <!-- Enhanced Structured Data -->
     <script type="application/ld+json">
@@ -335,7 +340,7 @@
     {% section 'footer' %}
     
     <!-- Scripts -->
-    <script src="{{ 'scripts/main.js' | asset_url }}" defer></script>
+    <script src="{{ 'main.js' | asset_url }}" defer></script>
     
     <!-- Enhanced Analytics Tracking -->
     <script>

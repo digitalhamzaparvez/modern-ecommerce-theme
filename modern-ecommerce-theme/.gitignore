@@ -2,3 +2,4 @@ node_modules
 assets/scripts/*.js.map
 assets/scripts/*.js.LICENSE.txt
 .DS_Store
+node_modules/

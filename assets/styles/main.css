@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Premium color palette */
+:root {
+  --premium-primary: #1e293b; /* slate-800 */
+  --premium-secondary: #475569; /* slate-600 */
+  --premium-accent: #f59e0b; /* amber-500 */
+  --premium-gold: #d97706; /* amber-600 */
+  --premium-cream: #fef3c7; /* amber-100 */
+  --premium-dark: #0f172a; /* slate-900 */
+  --premium-light: #f8fafc; /* slate-50 */
+  --premium-border: #e2e8f0; /* slate-200 */
+}
+
+/* Premium component styles */
+@layer components {
+  .btn-premium {
+    @apply inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-3 text-white font-medium shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105;
+  }
+  
+  .btn-premium-outline {
+    @apply inline-flex items-center justify-center rounded-lg border-2 border-amber-500 px-6 py-3 text-amber-600 font-medium hover:bg-amber-500 hover:text-white transition-all duration-200;
+  }
+  
+  .card-premium {
+    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100;
+  }
+  
+  .text-premium {
+    @apply text-slate-800;
+  }
+  
+  .bg-premium-gradient {
+    @apply bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900;
+  }
+  
+  .bg-premium-light {
+    @apply bg-gradient-to-br from-slate-50 to-white;
+  }
+}
+
+/* Premium typography */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-slate-800;
+  }
+  
+  body {
+    @apply text-slate-700 bg-slate-50;
+  }
+}

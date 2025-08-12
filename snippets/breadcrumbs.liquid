@@ -1,0 +1,16 @@
+<nav class="text-sm text-gray-600 mb-6" aria-label="Breadcrumb">
+  <ol class="flex items-center gap-2">
+    <li><a class="hover:text-blue-600" href="/">Home</a></li>
+    {% if collection %}
+      <li>/</li><li><a class="hover:text-blue-600" href="/collections">Shop</a></li>
+      <li>/</li><li aria-current="page" class="text-gray-900">{{ collection.title }}</li>
+    {% elsif blog %}
+      <li>/</li><li><a class="hover:text-blue-600" href="{{ blog.url }}">{{ blog.title }}</a></li>
+      {% if article %}
+        <li>/</li><li aria-current="page" class="text-gray-900">{{ article.title }}</li>
+      {% endif %}
+    {% elsif page %}
+      <li>/</li><li aria-current="page" class="text-gray-900">{{ page.title }}</li>
+    {% endif %}
+  </ol>
+</nav>

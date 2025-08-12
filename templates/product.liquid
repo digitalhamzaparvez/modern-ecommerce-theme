@@ -1,0 +1,29 @@
+{% section 'header' %}
+<main class="mx-auto max-w-7xl px-4 py-8 grid md:grid-cols-2 gap-10">
+  <div>
+    {% if product.images.size > 0 %}
+      <img src="{{ product.selected_or_first_available_variant.featured_image | img_url: '800x' }}" alt="{{ product.title | escape }}" class="rounded-lg">
+    {% endif %}
+  </div>
+  <div>
+    <h1 class="text-2xl font-semibold">{{ product.title }}</h1>
+    <div class="mt-2 text-lg">{{ product.price | money }}</div>
+    <form action="/cart/add" method="post" class="mt-4 flex gap-3 items-end">
+      {% if product.has_only_default_variant == false %}
+        <select name="id" class="border rounded-lg px-3 py-2">
+          {% for variant in product.variants %}
+            <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
+              {{ variant.title }} - {{ variant.price | money }}
+            </option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      {% endif %}
+      <input type="number" min="1" value="1" name="quantity" class="border rounded-lg px-3 py-2 w-24">
+      <button type="submit" class="btn-primary">Add to cart</button>
+    </form>
+    <div class="prose mt-6">{{ product.description }}</div>
+  </div>
+</main>
+{% section 'footer' %}

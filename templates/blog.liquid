@@ -1,0 +1,35 @@
+{% section 'header' %}
+<main class="mx-auto max-w-7xl px-4 py-10">
+  {% render 'breadcrumbs' %}
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold">{{ blog.title }}</h1>
+    {% if current_tags %}
+      <p class="mt-2 text-gray-600">Tag: {{ current_tags | join: ', ' }}</p>
+    {% endif %}
+  </header>
+
+  {% paginate blog.articles by 9 %}
+  <div class="grid gap-6 md:grid-cols-3">
+    {% for article in blog.articles %}
+      <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+        <a href="{{ article.url }}" class="block">
+          {% if article.image %}
+            <img src="{{ article.image | img_url: '900x' }}" alt="{{ article.title | escape }}" class="w-full h-44 object-cover">
+          {% endif %}
+          <div class="p-4">
+            <h2 class="font-medium line-clamp-2">{{ article.title }}</h2>
+            <p class="mt-1 text-sm text-gray-600 line-clamp-2">{{ article.excerpt | strip_html }}</p>
+            <p class="mt-2 text-xs text-gray-500">{{ article.published_at | date: "%b %d, %Y" }}</p>
+          </div>
+        </a>
+      </article>
+    {% endfor %}
+  </div>
+  <div class="mt-8 flex items-center justify-center gap-3">
+    {% if paginate.previous %}<a class="px-3 py-2 border rounded-lg" href="{{ paginate.previous.url }}">Previous</a>{% endif %}
+    <span class="text-sm text-gray-600">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+    {% if paginate.next %}<a class="px-3 py-2 border rounded-lg" href="{{ paginate.next.url }}">Next</a>{% endif %}
+  </div>
+  {% endpaginate %}
+</main>
+{% section 'footer' %}

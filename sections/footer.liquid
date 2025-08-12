@@ -1,0 +1,52 @@
+<footer class="bg-premium-gradient text-white">
+  <div class="mx-auto max-w-7xl px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-4">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <span class="font-bold text-xl">{{ shop.name }}</span>
+        </div>
+        <p class="text-slate-300">Premium products for an elevated lifestyle.</p>
+      </div>
+      
+      <div>
+        <h3 class="font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-slate-300">
+          <li><a href="/collections/all" class="hover:text-amber-400 transition-colors">Shop</a></li>
+          <li><a href="/blogs/news" class="hover:text-amber-400 transition-colors">Blog</a></li>
+          <li><a href="/pages/about" class="hover:text-amber-400 transition-colors">About</a></li>
+          <li><a href="/pages/contact" class="hover:text-amber-400 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="font-semibold mb-4">Support</h3>
+        <ul class="space-y-2 text-slate-300">
+          <li><a href="/pages/shipping" class="hover:text-amber-400 transition-colors">Shipping</a></li>
+          <li><a href="/pages/returns" class="hover:text-amber-400 transition-colors">Returns</a></li>
+          <li><a href="/pages/faq" class="hover:text-amber-400 transition-colors">FAQ</a></li>
+          <li><a href="/pages/privacy" class="hover:text-amber-400 transition-colors">Privacy</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="font-semibold mb-4">Newsletter</h3>
+        <p class="text-slate-300 mb-4">Stay updated with our latest products and offers.</p>
+        <form class="flex gap-2">
+          <input type="email" placeholder="Email" class="flex-1 px-3 py-2 rounded-lg text-slate-800 text-sm">
+          <button type="submit" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 rounded-lg text-sm font-medium transition-colors">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="border-t border-slate-700 mt-12 pt-8 text-center text-slate-400">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

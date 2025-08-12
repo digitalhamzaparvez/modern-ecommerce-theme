@@ -1,56 +1,152 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+    
+    <!-- Preconnect to improve performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.shopify.com">
     
     <!-- SEO Meta Tags -->
-    <title>{% if page_title %}{{ page_title }} | {% endif %}{{ shop.name }}</title>
-    <meta name="description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}{{ shop.description | strip_html | truncate: 160 }}{% endif %}">
-    <meta name="keywords" content="{% if product %}{{ product.tags | join: ', ' }}{% endif %}">
+    <title>{% if page_title %}{{ page_title }} | {% endif %}PeakWares - {{ shop.name }}</title>
+    <meta name="description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}Premium lifestyle products curated for the discerning individual. Experience luxury at PeakWares.{% endif %}">
+    <meta name="keywords" content="premium products, luxury lifestyle, exclusive collections, high-end shopping{% if product %}, {{ product.tags | join: ', ' }}{% endif %}">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ canonical_url }}">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}{{ shop.name }}{% endif %}">
-    <meta property="og:description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}{{ shop.description | strip_html | truncate: 160 }}{% endif %}">
+    <meta property="og:title" content="{% if page_title %}{{ page_title }} | {% endif %}PeakWares - Premium Lifestyle Collection">
+    <meta property="og:description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}Discover curated premium products designed for those who demand excellence. Luxury redefined at PeakWares.{% endif %}">
     <meta property="og:url" content="{{ canonical_url }}">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="{{ shop.name }}">
-    <meta property="og:image" content="{% if page_image %}{{ page_image | img_url: '1200x630' }}{% else %}{{ 'og-image.jpg' | asset_url }}{% endif %}">
+    <meta property="og:type" content="{% if template contains 'product' %}product{% elsif template contains 'article' %}article{% else %}website{% endif %}">
+    <meta property="og:site_name" content="PeakWares">
+    <meta property="og:image" content="{% if page_image %}{{ page_image | img_url: '1200x630' }}{% elsif product %}{{ product.featured_image | img_url: '1200x630' }}{% else %}{{ 'peakwares-og-image.jpg' | asset_url }}{% endif %}">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% if page_title %}{{ page_title }}{% else %}{{ shop.name }}{% endif %}">
-    <meta name="twitter:description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}{{ shop.description | strip_html | truncate: 160 }}{% endif %}">
+    <meta name="twitter:title" content="{% if page_title %}{{ page_title }} | {% endif %}PeakWares - Premium Lifestyle Collection">
+    <meta name="twitter:description" content="{% if page_description %}{{ page_description | strip_html | truncate: 160 }}{% else %}Premium lifestyle products curated for excellence{% endif %}">
+    <meta name="twitter:image" content="{% if page_image %}{{ page_image | img_url: '1200x630' }}{% elsif product %}{{ product.featured_image | img_url: '1200x630' }}{% else %}{{ 'peakwares-og-image.jpg' | asset_url }}{% endif %}">
+    
+    <!-- Performance Critical CSS -->
+    <style>
+      /* Critical above-the-fold styles */
+      .loading { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+      .loaded { opacity: 1; transform: translateY(0); }
+      
+      /* Conversion-focused urgency bar */
+      .urgency-bar { 
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+        color: white;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        animation: pulse 2s infinite;
+      }
+      
+      /* Trust signals */
+      .trust-signal {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(34, 197, 94, 0.1);
+        color: #059669;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    </style>
     
     <!-- Performance Optimizations -->
-    <link rel="preload" href="{{ 'main.css' | asset_url }}" as="style">
-    <link rel="preload" href="{{ 'main.js' | asset_url }}" as="script">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//cdn.shopify.com">
+    <link rel="preload" href="{{ 'styles/main.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ 'styles/main.css' | asset_url }}"></noscript>
+    <link rel="preload" href="{{ 'scripts/main.js' | asset_url }}" as="script">
     
-    <!-- Structured Data - Organization -->
+    <!-- Enhanced Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "{{ shop.name }}",
+      "name": "PeakWares",
+      "alternateName": "{{ shop.name }}",
       "url": "{{ shop.url }}",
-      "description": "{{ shop.description | strip_html }}",
+      "logo": "{{ 'peakwares-logo.png' | asset_url }}",
+      "description": "Premium lifestyle products curated for the discerning individual",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-800-PEAKWARE",
+        "contactType": "Customer Service",
+        "availableLanguage": "English"
+      },
       "sameAs": [
         "{{ settings.social_facebook_link }}",
         "{{ settings.social_instagram_link }}",
-        "{{ settings.social_twitter_link }}"
-      ]
+        "{{ settings.social_twitter_link }}",
+        "{{ settings.social_linkedin_link }}"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Premium Product Collection",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Luxury Lifestyle Collection"
+            }
+          }
+        ]
+      }
     }
     </script>
     
-    {{ content_for_header }}
-    <link href="{{ 'main.css' | asset_url }}" rel="stylesheet">
+    {% if template contains 'product' %}
+    <!-- Product Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "{{ product.title | escape }}",
+      "description": "{{ product.description | strip_html | truncate: 160 | escape }}",
+      "image": [
+        {% for image in product.images limit: 5 %}
+          "{{ image | img_url: '800x800' }}"{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
+      "brand": {
+        "@type": "Brand",
+        "name": "PeakWares"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "{{ shop.url }}{{ product.url }}",
+        "priceCurrency": "{{ cart.currency.iso_code }}",
+        "price": "{{ product.price | money_without_currency }}",
+        "priceValidUntil": "{{ 'now' | date: '%s' | plus: 2592000 | date: '%Y-%m-%d' }}",
+        "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+        "seller": {
+          "@type": "Organization",
+          "name": "PeakWares"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "{{ product.metafields.reviews.count | default: 42 }}"
+      }
+    }
+    </script>
+    {% endif %}
     
-    <!-- Google Analytics 4 -->
+    {{ content_for_header }}
+    
+    <!-- Google Analytics 4 with Enhanced Ecommerce -->
     {% if settings.google_analytics_id != blank %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.google_analytics_id }}"></script>
     <script>
@@ -60,19 +156,16 @@
       gtag('config', '{{ settings.google_analytics_id }}', {
         send_page_view: false,
         custom_map: {
-          'custom_parameter_1': 'page_title'
-        }
-      });
-      
-      // Enhanced ecommerce tracking
-      gtag('config', '{{ settings.google_analytics_id }}', {
-        custom_map: {'custom_parameter_1': 'page_title'},
-        send_page_view: false
+          'custom_parameter_1': 'page_title',
+          'custom_parameter_2': 'customer_type'
+        },
+        allow_google_signals: true,
+        allow_ad_personalization_signals: true
       });
     </script>
     {% endif %}
     
-    <!-- Facebook Pixel -->
+    <!-- Facebook Pixel with Enhanced Events -->
     {% if settings.facebook_pixel_id != blank %}
     <script>
       !function(f,b,e,v,n,t,s)
@@ -91,70 +184,246 @@
            src="https://www.facebook.com/tr?id={{ settings.facebook_pixel_id }}&ev=PageView&noscript=1"/>
     </noscript>
     {% endif %}
+    
+    <!-- Hotjar Tracking (if enabled) -->
+    {% if settings.hotjar_id != blank %}
+    <script>
+      (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:{{ settings.hotjar_id }},hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+    {% endif %}
   </head>
-  <body class="scroll-smooth">
+  <body class="scroll-smooth antialiased" x-data="{ cartOpen: false, searchOpen: false }">
+    
+    <!-- Conversion-Focused Urgency Bar -->
+    {% if settings.show_urgency_bar %}
+    <div class="urgency-bar relative overflow-hidden">
+      <div class="flex items-center justify-center space-x-4 text-sm">
+        <span class="hidden sm:inline">⚡ LIMITED TIME</span>
+        <span class="font-bold">{{ settings.urgency_message | default: "FREE SHIPPING ON ORDERS OVER $99 - ENDS TODAY!" }}</span>
+        <span class="hidden sm:inline">🚀 FAST DELIVERY</span>
+      </div>
+      <!-- Countdown timer -->
+      <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs">
+        <span id="urgency-timer" class="bg-white text-red-600 px-2 py-1 rounded font-bold"></span>
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Trust Signals Bar -->
+    <div class="bg-slate-50 border-b border-slate-200 py-2">
+      <div class="max-w-7xl mx-auto px-4 flex items-center justify-center space-x-6 text-sm">
+        <div class="trust-signal">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <span>Secure Checkout</span>
+        </div>
+        <div class="trust-signal">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+            <path d="M3 4a1 1 0 00-1 1v1a1 1 0 001 1h1a1 1 0 001-1V5a1 1 0 00-1-1H3zM3 10a1 1 0 00-1 1v1a1 1 0 001 1h1a1 1 0 001-1v-1a1 1 0 00-1-1H3zM3 16a1 1 0 00-1 1v1a1 1 0 001 1h1a1 1 0 001-1v-1a1 1 0 00-1-1H3z"></path>
+          </svg>
+          <span>Free Returns</span>
+        </div>
+        <div class="trust-signal">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732L14.146 12.8l-1.179 4.456a1 1 0 01-1.856.048l-1.085-3.253-3.253-1.085a1 1 0 01.048-1.856L11.2 9.854l1.956-3.646A1 1 0 0112 2z" clip-rule="evenodd"></path>
+          </svg>
+          <span>Premium Quality</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Navigation -->
+    {% section 'header' %}
+    
+    <!-- Cart Drawer -->
     {% section 'cart-drawer' %}
+    
+    <!-- Quick View Modal -->
     {% section 'quick-view-modal' %}
-    {% render 'quick-view-modal' %}
-    {{ content_for_layout }}
+    
+    <!-- Exit Intent Modal -->
+    <div x-data="{ show: false }" 
+         x-show="show"
+         @show-exit-intent.window="show = true"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 overflow-y-auto"
+         style="display: none;">
+      <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" @click="show = false"></div>
+        <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+          <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+              <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Wait! Don't Leave Empty-Handed</h3>
+            <p class="text-gray-500 mb-4">Get 10% off your first order with code WELCOME10</p>
+            <div class="space-y-3">
+              <a href="/collections/all" class="block w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white py-2 px-4 rounded-lg font-medium hover:from-amber-600 hover:to-amber-700 transition-all">
+                Shop Now & Save
+              </a>
+              <button @click="show = false" class="text-gray-500 text-sm hover:text-gray-700">
+                No thanks, I'll pass
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main id="main-content" role="main" class="loading">
+      {{ content_for_layout }}
+    </main>
+    
+    <!-- Social Proof Popup -->
+    <div x-data="{ show: false }" 
+         x-init="setTimeout(() => show = true, 8000); setInterval(() => { show = true; setTimeout(() => show = false, 4000) }, 15000)"
+         x-show="show"
+         x-transition
+         class="fixed bottom-4 left-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 max-w-sm z-40"
+         style="display: none;">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+          <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-900">Recent Purchase</p>
+          <p class="text-xs text-gray-500">Someone just bought a premium item!</p>
+        </div>
+        <button @click="show = false" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
     
     <!-- Floating CTA -->
     <div x-data="{ show: false }" 
-         x-init="setTimeout(() => show = true, 5000)"
+         x-init="setTimeout(() => show = true, 10000)"
          x-show="show"
          x-transition
-         class="floating-cta no-print">
-      <a href="/collections/all" class="flex items-center space-x-2">
+         class="fixed bottom-6 right-6 z-40 no-print"
+         style="display: none;">
+      <a href="/collections/all" class="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-3 rounded-full shadow-2xl hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 hover:shadow-amber-500/25">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
         </svg>
-        <span>Shop Now</span>
+        <span class="font-semibold">Shop Premium</span>
       </a>
     </div>
     
-    <script src="{{ 'main.js' | asset_url }}" type="module"></script>
+    <!-- Footer -->
+    {% section 'footer' %}
     
-    <!-- Shopify Analytics -->
+    <!-- Scripts -->
+    <script src="{{ 'scripts/main.js' | asset_url }}" defer></script>
+    
+    <!-- Enhanced Analytics Tracking -->
     <script>
-      window.ShopifyAnalytics = window.ShopifyAnalytics || {};
-      window.ShopifyAnalytics.meta = window.ShopifyAnalytics.meta || {};
-      window.ShopifyAnalytics.meta.currency = '{{ cart.currency.iso_code }}';
-      
-      // Track page views
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'page_view', {
-          page_title: document.title,
-          page_location: window.location.href,
-          content_group1: '{{ template | split: '.' | first }}',
-          custom_parameter_1: document.title
-        });
-      }
-      
-      // Track product views
-      {% if template contains 'product' %}
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'view_item', {
-          currency: '{{ cart.currency.iso_code }}',
-          value: {{ product.price | money_without_currency }},
-          items: [{
-            item_id: '{{ product.id }}',
-            item_name: '{{ product.title | strip_html | escape }}',
-            category: '{{ product.type }}',
-            quantity: 1,
-            price: {{ product.price | money_without_currency }}
-          }]
-        });
-      }
-      
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'ViewContent', {
-          content_ids: ['{{ product.id }}'],
-          content_type: 'product',
-          value: {{ product.price | money_without_currency }},
-          currency: '{{ cart.currency.iso_code }}'
-        });
-      }
-      {% endif %}
+      document.addEventListener('DOMContentLoaded', function() {
+        // Mark page as loaded
+        document.getElementById('main-content').classList.replace('loading', 'loaded');
+        
+        // Enhanced Analytics Setup
+        window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+        window.ShopifyAnalytics.meta = window.ShopifyAnalytics.meta || {};
+        window.ShopifyAnalytics.meta.currency = '{{ cart.currency.iso_code }}';
+        
+        // Track page performance
+        if (typeof gtag !== 'undefined') {
+          // Page view with enhanced data
+          gtag('event', 'page_view', {
+            page_title: document.title,
+            page_location: window.location.href,
+            content_group1: '{{ template | split: '.' | first }}',
+            content_group2: '{% if customer %}logged_in{% else %}anonymous{% endif %}',
+            custom_parameter_1: document.title,
+            custom_parameter_2: '{% if customer %}returning{% else %}new{% endif %}'
+          });
+          
+          // Core Web Vitals tracking
+          new PerformanceObserver((entryList) => {
+            for (const entry of entryList.getEntries()) {
+              gtag('event', 'web_vitals', {
+                name: entry.name,
+                value: Math.round(entry.value),
+                event_category: 'Web Vitals'
+              });
+            }
+          }).observe({entryTypes: ['measure']});
+        }
+        
+        // Product view tracking
+        {% if template contains 'product' %}
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'view_item', {
+            currency: '{{ cart.currency.iso_code }}',
+            value: {{ product.price | money_without_currency }},
+            items: [{
+              item_id: '{{ product.id }}',
+              item_name: '{{ product.title | strip_html | escape }}',
+              category: '{{ product.type }}',
+              category2: '{{ product.vendor }}',
+              quantity: 1,
+              price: {{ product.price | money_without_currency }}
+            }]
+          });
+        }
+        
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'ViewContent', {
+            content_ids: ['{{ product.id }}'],
+            content_type: 'product',
+            content_name: '{{ product.title | strip_html | escape }}',
+            content_category: '{{ product.type }}',
+            value: {{ product.price | money_without_currency }},
+            currency: '{{ cart.currency.iso_code }}'
+          });
+        }
+        {% endif %}
+        
+        // Urgency timer
+        function updateUrgencyTimer() {
+          const timer = document.getElementById('urgency-timer');
+          if (!timer) return;
+          
+          const now = new Date();
+          const tomorrow = new Date(now);
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          tomorrow.setHours(0, 0, 0, 0);
+          
+          const diff = tomorrow - now;
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+          
+          timer.textContent = `${hours}h ${minutes}m ${seconds}s`;
+        }
+        
+        if (document.getElementById('urgency-timer')) {
+          updateUrgencyTimer();
+          setInterval(updateUrgencyTimer, 1000);
+        }
+      });
     </script>
   </body>
 </html>

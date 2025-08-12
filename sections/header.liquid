@@ -1,32 +1,154 @@
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200" x-data>
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-100" x-data="{ mobileMenuOpen: false, searchOpen: false }">
+  <!-- Premium Announcement Bar -->
+  <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white text-center py-2 text-sm font-medium">
+    <div class="flex items-center justify-center space-x-4">
+      <span class="hidden sm:inline">✨ Premium Collection</span>
+      <span>FREE WORLDWIDE SHIPPING ON ORDERS OVER $200</span>
+      <span class="hidden sm:inline">🚀 Express Delivery</span>
+    </div>
+  </div>
+  
   <div class="mx-auto max-w-7xl px-6">
-    <div class="flex items-center justify-between h-16">
-      <a href="/" class="flex items-center space-x-2">
-        <div class="w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    <div class="flex items-center justify-between h-20">
+      <!-- Premium Logo -->
+      <a href="/" class="flex items-center space-x-3 flex-shrink-0">
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-xl flex items-center justify-center shadow-lg">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
           </svg>
+          </div>
+          <div class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full flex items-center justify-center">
+            <div class="w-2 h-2 bg-white rounded-full"></div>
+          </div>
         </div>
-        <span class="font-bold text-xl text-premium">{{ shop.name }}</span>
+        <div class="hidden sm:block">
+          <div class="font-bold text-2xl text-slate-900 tracking-tight">PeakWares</div>
+          <div class="text-xs text-slate-500 -mt-1 tracking-widest">PREMIUM LIFESTYLE</div>
+        </div>
       </a>
       
-      <nav class="hidden md:flex items-center space-x-8">
-        <a href="/collections/all" class="text-slate-700 hover:text-amber-600 font-medium transition-colors">Shop</a>
-        <a href="/blogs/news" class="text-slate-700 hover:text-amber-600 font-medium transition-colors">Blog</a>
-        <a href="/pages/contact" class="text-slate-700 hover:text-amber-600 font-medium transition-colors">Contact</a>
+      <!-- Premium Navigation -->
+      <nav class="hidden lg:flex items-center space-x-10">
+        <div class="relative group">
+          <a href="/collections/all" class="text-slate-800 hover:text-slate-900 font-semibold text-lg tracking-wide transition-colors flex items-center uppercase">
+            Collections
+            <svg class="w-4 h-4 ml-2 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </a>
+          <!-- Luxury Mega Menu -->
+          <div class="absolute top-full left-0 w-[600px] bg-white shadow-2xl rounded-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 mt-4 overflow-hidden">
+            <div class="p-8">
+              <div class="grid grid-cols-3 gap-8">
+                <div>
+                  <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-widest">Premium Collections</h4>
+                  <ul class="space-y-3">
+                    <li><a href="/collections/luxury-lifestyle" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Luxury Lifestyle</a></li>
+                    <li><a href="/collections/executive-essentials" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Executive Essentials</a></li>
+                    <li><a href="/collections/premium-wellness" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Premium Wellness</a></li>
+                    <li><a href="/collections/exclusive-tech" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Exclusive Tech</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-widest">Featured</h4>
+                  <ul class="space-y-3">
+                    <li><a href="/collections/limited-edition" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Limited Edition</a></li>
+                    <li><a href="/collections/bestsellers" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Bestsellers</a></li>
+                    <li><a href="/collections/new-arrivals" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">New Arrivals</a></li>
+                    <li><a href="/collections/curated" class="text-slate-600 hover:text-slate-900 transition-colors font-medium">Curated Selection</a></li>
+                  </ul>
+                </div>
+                <div class="bg-slate-50 -m-8 ml-0 p-8 flex flex-col justify-center">
+                  <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-slate-900 to-slate-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
+                      </svg>
+                    </div>
+                    <h5 class="font-bold text-slate-900 mb-2">Premium Access</h5>
+                    <p class="text-sm text-slate-600 mb-4">Exclusive collections for discerning customers</p>
+                    <a href="/collections/vip" class="btn-premium text-sm">Explore VIP</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="/blogs/lifestyle" class="text-slate-800 hover:text-slate-900 font-semibold text-lg tracking-wide transition-colors uppercase">Journal</a>
+        <a href="/pages/concierge" class="text-slate-800 hover:text-slate-900 font-semibold text-lg tracking-wide transition-colors uppercase">Concierge</a>
       </nav>
       
-      <div class="flex items-center space-x-4">
-        <a href="/account/login" class="text-slate-700 hover:text-amber-600 font-medium transition-colors">Login</a>
-        <a href="/cart" class="relative">
+      <!-- Search Bar (Desktop) -->
+      <div class="hidden md:flex flex-1 max-w-md mx-8">
+        <form action="/search" method="get" class="relative w-full">
+          <input type="search" name="q" placeholder="Search products..." 
+                 class="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                 value="{{ search.terms | escape }}">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+            <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Actions -->
+      <div class="flex items-center space-x-2">
+        <!-- Search Toggle (Mobile) -->
+        <button @click="searchOpen = !searchOpen" class="md:hidden p-2 text-slate-700 hover:text-amber-600 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </button>
+        
+        <!-- Account -->
+        <a href="/account/login" class="hidden sm:flex text-slate-700 hover:text-amber-600 font-medium transition-colors">Login</a>
+        
+        <!-- Cart -->
+        <button @click="$dispatch('cart:toggle')" class="relative">
           <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center text-white">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h12M9 19v2m4-2v2"></path>
             </svg>
           </div>
           <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" x-text="$store.cart.count">0</span>
-        </a>
+        </button>
+        
+        <!-- Mobile Menu Toggle -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 text-slate-700 hover:text-amber-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </div>
+    
+    <!-- Mobile Search -->
+    <div x-show="searchOpen" x-transition class="md:hidden py-4 border-t">
+      <form action="/search" method="get" class="relative">
+        <input type="search" name="q" placeholder="Search products..." 
+               class="w-full px-4 py-3 pl-10 pr-4 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+               value="{{ search.terms | escape }}">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+          <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div x-show="mobileMenuOpen" x-transition class="lg:hidden border-t bg-white">
+    <nav class="px-6 py-4 space-y-4">
+      <a href="/collections/all" class="block text-slate-700 hover:text-amber-600 font-medium transition-colors">Shop</a>
+      <a href="/blogs/news" class="block text-slate-700 hover:text-amber-600 font-medium transition-colors">Blog</a>
+      <a href="/pages/contact" class="block text-slate-700 hover:text-amber-600 font-medium transition-colors">Contact</a>
+      <div class="pt-4 border-t">
+        <a href="/account/login" class="block text-slate-700 hover:text-amber-600 font-medium transition-colors">Login</a>
+        <a href="/account/register" class="block mt-2 btn-premium text-center">Sign Up</a>
+      </div>
+    </nav>
   </div>
 </header>

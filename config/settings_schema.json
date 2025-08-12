@@ -1,10 +1,258 @@
 [
   {
-    "name": "Theme settings",
+    "name": "Analytics & Tracking",
     "settings": [
-      { "type": "text", "id": "social_facebook_link", "label": "Facebook URL" },
-      { "type": "text", "id": "social_instagram_link", "label": "Instagram URL" },
-      { "type": "text", "id": "social_twitter_link", "label": "Twitter URL" }
+      {
+        "type": "header",
+        "content": "Google Analytics"
+      },
+      {
+        "type": "text",
+        "id": "google_analytics_id",
+        "label": "Google Analytics 4 Measurement ID",
+        "info": "Example: G-XXXXXXXXXX"
+      },
+      {
+        "type": "header",
+        "content": "Facebook Pixel"
+      },
+      {
+        "type": "text",
+        "id": "facebook_pixel_id",
+        "label": "Facebook Pixel ID",
+        "info": "Example: 123456789012345"
+      },
+      {
+        "type": "header",
+        "content": "Other Tracking"
+      },
+      {
+        "type": "text",
+        "id": "hotjar_id",
+        "label": "Hotjar Site ID (Optional)"
+      },
+      {
+        "type": "text",
+        "id": "klaviyo_api_key",
+        "label": "Klaviyo Public API Key (Optional)"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "Store Information",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Contact Information"
+      },
+      {
+        "type": "text",
+        "id": "store_phone",
+        "label": "Phone Number"
+      },
+      {
+        "type": "text",
+        "id": "store_email",
+        "label": "Email Address"
+      },
+      {
+        "type": "header",
+        "content": "Address (for Local SEO)"
+      },
+      {
+        "type": "text",
+        "id": "store_address",
+        "label": "Street Address"
+      },
+      {
+        "type": "text",
+        "id": "store_city",
+        "label": "City"
+      },
+      {
+        "type": "text",
+        "id": "store_state",
+        "label": "State/Province"
+      },
+      {
+        "type": "text",
+        "id": "store_zip",
+        "label": "ZIP/Postal Code"
+      },
+      {
+        "type": "text",
+        "id": "store_country",
+        "label": "Country"
+      }
+    ]
+  },
+  {
+    "name": "Performance & SEO",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Performance Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_lazy_loading",
+        "label": "Enable lazy loading for images",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_critical_css",
+        "label": "Enable critical CSS optimization",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "SEO Settings"
+      },
+      {
+        "type": "textarea",
+        "id": "seo_default_description",
+        "label": "Default meta description",
+        "info": "Used when no specific description is set"
+      },
+      {
+        "type": "text",
+        "id": "seo_default_keywords",
+        "label": "Default keywords",
+        "info": "Comma-separated list of keywords"
+      }
+    ]
+  },
+  {
+    "name": "Conversion Optimization",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Urgency Features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_urgency_banner",
+        "label": "Enable urgency banner",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "urgency_banner_text",
+        "label": "Urgency banner text",
+        "default": "🔥 Limited Time: Free Shipping on Orders Over $50!"
+      },
+      {
+        "type": "header",
+        "content": "Exit Intent"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_exit_intent",
+        "label": "Enable exit intent popup",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "exit_intent_discount_code",
+        "label": "Exit intent discount code",
+        "default": "WELCOME10"
+      },
+      {
+        "type": "number",
+        "id": "exit_intent_discount_percent",
+        "label": "Discount percentage",
+        "default": 10
+      },
+      {
+        "type": "header",
+        "content": "Social Proof"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_proof",
+        "label": "Enable social proof notifications",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "social_proof_delay",
+        "label": "Social proof display delay (seconds)",
+        "default": 5
+      }
+    ]
+  },
+  {
+    "name": "Typography & Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color",
+        "default": "#f59e0b"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Color",
+        "default": "#1e293b"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent Color",
+        "default": "#d97706"
+      },
+      {
+        "type": "header",
+        "content": "Typography"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body Font",
+        "default": "assistant_n4"
+      }
     ]
   }
 ]

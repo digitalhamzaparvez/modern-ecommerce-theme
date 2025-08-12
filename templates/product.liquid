@@ -1,29 +1,274 @@
 {% section 'header' %}
-<main class="mx-auto max-w-7xl px-4 py-8 grid md:grid-cols-2 gap-10">
-  <div>
-    {% if product.images.size > 0 %}
-      <img src="{{ product.selected_or_first_available_variant.featured_image | img_url: '800x' }}" alt="{{ product.title | escape }}" class="rounded-lg">
-    {% endif %}
-  </div>
-  <div>
-    <h1 class="text-2xl font-semibold">{{ product.title }}</h1>
-    <div class="mt-2 text-lg">{{ product.price | money }}</div>
-    <form action="/cart/add" method="post" class="mt-4 flex gap-3 items-end">
-      {% if product.has_only_default_variant == false %}
-        <select name="id" class="border rounded-lg px-3 py-2">
-          {% for variant in product.variants %}
-            <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
-              {{ variant.title }} - {{ variant.price | money }}
-            </option>
-          {% endfor %}
-        </select>
-      {% else %}
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+<!-- Product Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ product.title | strip_html }}",
+  "description": "{{ product.description | strip_html | truncate: 300 }}",
+  "image": [
+    {% for image in product.images limit: 5 %}
+      "{{ image | img_url: '800x800' }}"{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ],
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ product.vendor }}"
+  },
+  "sku": "{{ product.selected_or_first_available_variant.sku }}",
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ canonical_url }}",
+    "priceCurrency": "{{ cart.currency.iso_code }}",
+    "price": "{{ product.selected_or_first_available_variant.price | money_without_currency }}",
+    "priceValidUntil": "{{ 'now' | date: '%s' | plus: 2592000 | date: '%Y-%m-%d' }}",
+    "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": {
+      "@type": "Organization",
+      "name": "{{ shop.name }}"
+    }
+  },
+  "category": "{{ product.type }}"
+}
+</script>
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+  <!-- Breadcrumbs -->
+  <nav class="mb-8">
+  {% render 'breadcrumbs' %}
+  </nav>
+  
+  <div class="grid lg:grid-cols-2 gap-12" x-data="productPage()">
+    <!-- Product Images -->
+    <div class="space-y-4">
+      <!-- Main Image -->
+        <div class="aspect-square bg-slate-100 rounded-xl overflow-hidden">
+        <img 
+          x-bind:src="selectedImage" 
+          alt="{{ product.title }}"
+          class="w-full h-full object-cover transition-all duration-300 hover:scale-105"
+          loading="eager"
+        >
+        </div>
+        
+      <!-- Thumbnail Gallery -->
+        {% if product.images.size > 1 %}
+          <div class="grid grid-cols-4 gap-2">
+            {% for image in product.images limit: 4 %}
+        <button 
+          @click="selectedImage = '{{ image | img_url: '800x800' }}'"
+          class="aspect-square bg-slate-100 rounded-lg overflow-hidden border-2 transition-colors"
+          :class="selectedImage === '{{ image | img_url: '800x800' }}' ? 'border-amber-500' : 'border-transparent hover:border-slate-300'"
+        >
+          <img 
+            src="{{ image | img_url: '200x200' }}" 
+            alt="{{ product.title }}"
+            class="w-full h-full object-cover"
+            loading="lazy"
+          >
+              </button>
+            {% endfor %}
+          </div>
       {% endif %}
-      <input type="number" min="1" value="1" name="quantity" class="border rounded-lg px-3 py-2 w-24">
-      <button type="submit" class="btn-primary">Add to cart</button>
-    </form>
-    <div class="prose mt-6">{{ product.description }}</div>
+    </div>
+    
+    <!-- Product Info -->
+    <div class="space-y-6">
+      <!-- Title & Rating -->
+      <div>
+        <h1 class="text-3xl font-bold text-slate-800 mb-2">{{ product.title }}</h1>
+        <div class="flex items-center space-x-2">
+          <div class="flex items-center">
+          {% for i in (1..5) %}
+            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          {% endfor %}
+          </div>
+          <span class="text-slate-600">(4.8) 124 reviews</span>
+        </div>
+      </div>
+      
+      <!-- Price -->
+      <div class="space-y-2">
+        <div class="flex items-center space-x-3">
+          <span class="text-3xl font-bold text-slate-800" x-text="selectedPrice">
+            {{ product.selected_or_first_available_variant.price | money }}
+          </span>
+          {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+          <span class="text-xl text-slate-500 line-through">
+            {{ product.selected_or_first_available_variant.compare_at_price | money }}
+          </span>
+          <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium">
+            Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}
+            </span>
+          {% endif %}
+        </div>
+        <p class="text-green-600 font-medium">✓ Free shipping on orders over $50</p>
+      </div>
+      
+      <!-- Variants -->
+      {% if product.variants.size > 1 %}
+      <div class="space-y-4">
+        {% for option in product.options_with_values %}
+        <div>
+          <label class="block font-medium text-slate-800 mb-2">{{ option.name }}</label>
+          <div class="flex flex-wrap gap-2">
+            {% for value in option.values %}
+            <button 
+              @click="selectVariant('{{ option.name }}', '{{ value }}')"
+              class="px-4 py-2 border rounded-lg font-medium transition-colors"
+              :class="selectedOptions['{{ option.name }}'] === '{{ value }}' ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-slate-300 hover:border-slate-400'"
+            >
+              {{ value }}
+            </button>
+            {% endfor %}
+        </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Quantity & Add to Cart -->
+      <div class="space-y-4">
+        <div class="flex items-center space-x-4">
+          <label class="font-medium text-slate-800">Quantity:</label>
+          <div class="flex items-center border border-slate-300 rounded-lg">
+            <button @click="quantity = Math.max(1, quantity - 1)" class="px-3 py-2 hover:bg-slate-50">-</button>
+            <input x-model="quantity" type="number" min="1" class="w-16 text-center py-2 border-0 focus:ring-0">
+            <button @click="quantity++" class="px-3 py-2 hover:bg-slate-50">+</button>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <button 
+            @click="addToCart()"
+            :disabled="!selectedVariant || !selectedVariant.available"
+            class="w-full btn-premium text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span x-show="selectedVariant && selectedVariant.available">Add to Cart - <span x-text="selectedPrice"></span></span>
+            <span x-show="!selectedVariant || !selectedVariant.available">Out of Stock</span>
+          </button>
+          
+          <button class="w-full btn-premium-outline text-lg py-4">
+            Buy Now - Fast Checkout
+          </button>
+        </div>
+      </div>
+      
+      <!-- Trust Signals -->
+      <div class="grid grid-cols-3 gap-4 py-6 border-t border-b">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <p class="text-sm font-medium">Free Returns</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+          </div>
+          <p class="text-sm font-medium">Secure Payment</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <p class="text-sm font-medium">Fast Shipping</p>
+    </div>
   </div>
+  
+      <!-- Product Description -->
+      <div class="prose prose-slate max-w-none">
+        <h3>Product Description</h3>
+        {{ product.description }}
+      </div>
+      </div>
+    </div>
+    
+  <!-- Related Products -->
+  {% assign related_products = collections[product.collections.first.handle].products | where: 'id', '!=', product.id | limit: 4 %}
+  {% if related_products.size > 0 %}
+  <section class="mt-16">
+    <h2 class="text-2xl font-bold text-slate-800 mb-8">You Might Also Like</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for product in related_products %}
+        {% render 'product-card', product: product %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 </main>
+
+<script>
+  function productPage() {
+    return {
+      selectedImage: '{{ product.featured_image | img_url: "800x800" }}',
+      selectedOptions: {},
+      selectedVariant: null,
+      selectedPrice: '{{ product.selected_or_first_available_variant.price | money }}',
+      quantity: 1,
+      
+      init() {
+        // Initialize with first available variant
+        this.selectedVariant = {{ product.selected_or_first_available_variant | json }};
+        
+        // Set initial options
+        {% for option in product.options_with_values %}
+        this.selectedOptions['{{ option.name }}'] = '{{ product.selected_or_first_available_variant.options[forloop.index0] }}';
+        {% endfor %}
+      },
+      
+      selectVariant(optionName, value) {
+        this.selectedOptions[optionName] = value;
+        
+        // Find matching variant
+        const variants = {{ product.variants | json }};
+        this.selectedVariant = variants.find(variant => {
+          return Object.keys(this.selectedOptions).every((key, index) => {
+            return variant.options[index] === this.selectedOptions[key];
+          });
+        });
+        
+        if (this.selectedVariant) {
+          this.selectedPrice = Shopify.formatMoney(this.selectedVariant.price);
+          this.selectedImage = this.selectedVariant.featured_image?.src || this.selectedImage;
+        }
+      },
+      
+      async addToCart() {
+        if (!this.selectedVariant) return;
+        
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: this.selectedVariant.id,
+              quantity: this.quantity
+            })
+          });
+          
+          if (response.ok) {
+            // Update cart count
+            Alpine.store('cart').refresh();
+            // Open cart drawer
+            document.dispatchEvent(new CustomEvent('cart:toggle'));
+          }
+        } catch (error) {
+          console.error('Add to cart failed:', error);
+        }
+      }
+    };
+  }
+</script>
+
 {% section 'footer' %}

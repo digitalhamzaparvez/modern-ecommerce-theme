@@ -1,23 +1,154 @@
-<section class="py-16 bg-premium-light">
+<section class="py-24 bg-gradient-to-b from-white to-slate-50">
   <div class="mx-auto max-w-7xl px-6">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl lg:text-4xl font-bold text-premium mb-4">Shop by Category</h2>
-      <p class="text-slate-600 text-lg">Explore our premium collections</p>
+    <!-- Premium Section Header -->
+    <div class="text-center mb-20">
+      <div class="inline-flex items-center gap-3 px-6 py-3 bg-slate-100 rounded-full mb-6">
+        <div class="w-2 h-2 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full"></div>
+        <span class="text-sm font-semibold tracking-widest uppercase text-slate-700">Curated Collections</span>
+      </div>
+      <h2 class="text-4xl lg:text-5xl font-light text-slate-900 mb-6 tracking-tight">
+        Distinctive
+        <span class="font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Categories</span>
+      </h2>
+      <p class="text-xl text-slate-600 max-w-3xl mx-auto font-light leading-relaxed">
+        Each collection represents our commitment to excellence, carefully curated for the discerning individual who appreciates quality and sophistication.
+      </p>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {% assign categories = 'health-wellness,pet-products,home-garden,beauty-care,tech-accessories' | split: ',' %}
-      {% for category in categories %}
-        <a href="/collections/{{ category }}" class="group">
-          <div class="card-premium p-6 text-center group-hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center">
-              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-              </svg>
+
+    <!-- Premium Categories Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+      <!-- Large Featured Category -->
+      <div class="lg:row-span-2">
+        <a href="/collections/luxury-lifestyle" class="group block relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
+          <div class="aspect-[4/5] bg-gradient-to-br from-slate-900 to-slate-700 relative overflow-hidden">
+            <!-- Premium Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+            
+            <!-- Category Content -->
+            <div class="absolute bottom-0 left-0 right-0 p-8 z-20 text-white">
+              <div class="space-y-4">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                  <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+                  Signature Collection
+                </div>
+                <h3 class="text-3xl lg:text-4xl font-light leading-tight">
+                  Luxury
+                  <span class="block font-bold">Lifestyle</span>
+                </h3>
+                <p class="text-slate-300 text-lg leading-relaxed">
+                  Premium essentials for the modern connoisseur
+                </p>
+                <div class="flex items-center text-amber-400 font-semibold group-hover:text-amber-300 transition-colors">
+                  <span class="mr-2">Explore Collection</span>
+                  <svg class="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                  </svg>
+                </div>
+              </div>
             </div>
-            <h3 class="font-semibold text-premium capitalize">{{ category | replace: '-', ' ' }}</h3>
           </div>
         </a>
-      {% endfor %}
+      </div>
+
+      <!-- Smaller Categories -->
+      <div class="space-y-8">
+        <a href="/collections/executive-essentials" class="group block relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+          <div class="aspect-[3/2] bg-gradient-to-br from-slate-800 to-slate-600 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+              <h3 class="text-2xl font-semibold mb-2">Executive Essentials</h3>
+              <p class="text-slate-300 text-sm mb-3">Professional excellence redefined</p>
+              <div class="flex items-center text-amber-400 font-medium group-hover:text-amber-300 transition-colors text-sm">
+                <span class="mr-2">Shop Now</span>
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/collections/premium-wellness" class="group block relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+          <div class="aspect-[3/2] bg-gradient-to-br from-slate-700 to-slate-500 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+              <h3 class="text-2xl font-semibold mb-2">Premium Wellness</h3>
+              <p class="text-slate-300 text-sm mb-3">Elevate your well-being journey</p>
+              <div class="flex items-center text-amber-400 font-medium group-hover:text-amber-300 transition-colors text-sm">
+                <span class="mr-2">Shop Now</span>
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Additional Categories Row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="/collections/exclusive-tech" class="group block relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+        <div class="aspect-[4/3] bg-gradient-to-br from-slate-600 to-slate-400 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+            <h3 class="text-xl font-semibold mb-2">Exclusive Tech</h3>
+            <p class="text-slate-300 text-sm mb-3">Innovation meets luxury</p>
+            <div class="flex items-center text-amber-400 font-medium group-hover:text-amber-300 transition-colors text-sm">
+              <span class="mr-2">Discover</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="/collections/artisan-crafted" class="group block relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+        <div class="aspect-[4/3] bg-gradient-to-br from-slate-500 to-slate-300 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+            <h3 class="text-xl font-semibold mb-2">Artisan Crafted</h3>
+            <p class="text-slate-300 text-sm mb-3">Handcrafted perfection</p>
+            <div class="flex items-center text-amber-400 font-medium group-hover:text-amber-300 transition-colors text-sm">
+              <span class="mr-2">Explore</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="/collections/limited-edition" class="group block relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+        <div class="aspect-[4/3] bg-gradient-to-br from-slate-400 to-slate-200 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/80 rounded-full text-xs font-bold mb-2">
+              <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+              LIMITED
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Exclusive Editions</h3>
+            <p class="text-slate-300 text-sm mb-3">Rare finds for collectors</p>
+            <div class="flex items-center text-amber-400 font-medium group-hover:text-amber-300 transition-colors text-sm">
+              <span class="mr-2">View Collection</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-16">
+      <a href="/collections/all" class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-slate-900 to-slate-700 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+        <span class="text-lg">View All Collections</span>
+        <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
     </div>
   </div>
 </section>

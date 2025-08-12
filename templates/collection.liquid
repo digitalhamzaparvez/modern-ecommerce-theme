@@ -202,37 +202,63 @@
         </div>
       </div>
 
-      <!-- Products Grid -->
-      <div 
-        :class="viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'"
-        x-show="filteredProducts.length > 0"
-      >
-        <template x-for="product in paginatedProducts" :key="product.id">
-          <div x-html="product.html"></div>
-        </template>
-      </div>
-
-      <!-- No Results -->
-      <div x-show="filteredProducts.length === 0" class="text-center py-12">
-        <svg class="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        <h3 class="text-xl font-semibold text-slate-800 mb-2">No products found</h3>
-        <p class="text-slate-600 mb-4">Try adjusting your filters or search terms</p>
-        <button @click="clearFilters()" class="btn-premium">Clear Filters</button>
-      </div>
-
-      <!-- Load More / Pagination -->
-      <div x-show="hasMoreProducts" class="mt-8 text-center">
-        <button 
-          @click="loadMore()"
-          :disabled="loading"
-          class="btn-premium-outline px-8 py-3 disabled:opacity-50"
+      {% paginate collection.products by 12 %}
+        <!-- Products Grid -->
+        <div 
+          :class="viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          <span x-show="!loading">Load More Products</span>
-          <span x-show="loading">Loading...</span>
-        </button>
-      </div>
+          {% for product in collection.products %}
+            {% render 'product-card', product: product, view_mode: 'grid', show_quick_add: true, show_quick_view: true %}
+          {% endfor %}
+        </div>
+
+        <!-- No Results -->
+        {% if collection.products.size == 0 %}
+        <div class="text-center py-12">
+          <svg class="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-slate-800 mb-2">No products found</h3>
+          <p class="text-slate-600 mb-4">Check back soon for new products</p>
+        </div>
+        {% endif %}
+
+        <!-- Pagination -->
+        {% if paginate.pages > 1 %}
+        <nav class="mt-8 flex justify-center">
+          <div class="flex items-center space-x-2">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}" class="btn-premium-outline px-4 py-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+              </a>
+            {% endif %}
+            
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a href="{{ part.url }}" class="btn-premium-outline px-4 py-2">{{ part.title }}</a>
+              {% else %}
+                {% if part.title == paginate.current_page %}
+                  <span class="btn-premium px-4 py-2">{{ part.title }}</span>
+                {% else %}
+                  <span class="px-4 py-2 text-slate-400">{{ part.title }}</span>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" class="btn-premium-outline px-4 py-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+        </nav>
+        {% endif %}
+      {% endpaginate %}
     </div>
   </div>
 </main>
@@ -242,170 +268,10 @@
     return {
       filtersOpen: false,
       viewMode: 'grid',
-      sortBy: 'manual',
-      priceRange: { min: '', max: '' },
-      selectedTags: [],
-      selectedVendors: [],
-      activeFilters: [],
-      allProducts: {{ collection.products | json }},
-      filteredProducts: [],
-      paginatedProducts: [],
-      currentPage: 1,
-      productsPerPage: 12,
-      loading: false,
       
       init() {
-        this.filteredProducts = [...this.allProducts];
-        this.updatePagination();
-        this.renderProducts();
-      },
-      
-      get hasMoreProducts() {
-        return this.currentPage * this.productsPerPage < this.filteredProducts.length;
-      },
-      
-      applySorting() {
-        const sortMap = {
-          'manual': () => 0,
-          'best-selling': (a, b) => b.sales - a.sales,
-          'title-ascending': (a, b) => a.title.localeCompare(b.title),
-          'title-descending': (a, b) => b.title.localeCompare(a.title),
-          'price-ascending': (a, b) => a.price - b.price,
-          'price-descending': (a, b) => b.price - a.price,
-          'created-ascending': (a, b) => new Date(a.created_at) - new Date(b.created_at),
-          'created-descending': (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        };
-        
-        this.filteredProducts.sort(sortMap[this.sortBy] || sortMap.manual);
-        this.currentPage = 1;
-        this.updatePagination();
-      },
-      
-      applyFilters() {
-        let filtered = [...this.allProducts];
-        
-        // Price filter
-        if (this.priceRange.min !== '' || this.priceRange.max !== '') {
-          filtered = filtered.filter(product => {
-            const price = product.price_min / 100;
-            const min = this.priceRange.min !== '' ? parseFloat(this.priceRange.min) : 0;
-            const max = this.priceRange.max !== '' ? parseFloat(this.priceRange.max) : Infinity;
-            return price >= min && price <= max;
-          });
-        }
-        
-        // Tag filter
-        if (this.selectedTags.length > 0) {
-          filtered = filtered.filter(product => 
-            this.selectedTags.some(tag => product.tags.includes(tag))
-          );
-        }
-        
-        // Vendor filter
-        if (this.selectedVendors.length > 0) {
-          filtered = filtered.filter(product => 
-            this.selectedVendors.includes(product.vendor)
-          );
-        }
-        
-        this.filteredProducts = filtered;
-        this.currentPage = 1;
-        this.updatePagination();
-        this.updateActiveFilters();
-      },
-      
-      toggleTag(tag) {
-        const index = this.selectedTags.indexOf(tag);
-        if (index > -1) {
-          this.selectedTags.splice(index, 1);
-        } else {
-          this.selectedTags.push(tag);
-        }
-        this.applyFilters();
-      },
-      
-      toggleVendor(vendor) {
-        const index = this.selectedVendors.indexOf(vendor);
-        if (index > -1) {
-          this.selectedVendors.splice(index, 1);
-        } else {
-          this.selectedVendors.push(vendor);
-        }
-        this.applyFilters();
-      },
-      
-      applyPriceFilter() {
-        this.applyFilters();
-      },
-      
-      clearFilters() {
-        this.priceRange = { min: '', max: '' };
-        this.selectedTags = [];
-        this.selectedVendors = [];
-        this.activeFilters = [];
-        this.filteredProducts = [...this.allProducts];
-        this.currentPage = 1;
-        this.updatePagination();
-        
-        // Reset form elements
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-      },
-      
-      updateActiveFilters() {
-        this.activeFilters = [];
-        
-        if (this.priceRange.min !== '' || this.priceRange.max !== '') {
-          this.activeFilters.push({
-            id: 'price',
-            label: `Price: $${this.priceRange.min || '0'} - $${this.priceRange.max || '∞'}`
-          });
-        }
-        
-        this.selectedTags.forEach(tag => {
-          this.activeFilters.push({ id: `tag-${tag}`, label: tag });
-        });
-        
-        this.selectedVendors.forEach(vendor => {
-          this.activeFilters.push({ id: `vendor-${vendor}`, label: vendor });
-        });
-      },
-      
-      removeFilter(filterId) {
-        if (filterId === 'price') {
-          this.priceRange = { min: '', max: '' };
-        } else if (filterId.startsWith('tag-')) {
-          const tag = filterId.replace('tag-', '');
-          this.selectedTags = this.selectedTags.filter(t => t !== tag);
-        } else if (filterId.startsWith('vendor-')) {
-          const vendor = filterId.replace('vendor-', '');
-          this.selectedVendors = this.selectedVendors.filter(v => v !== vendor);
-        }
-        this.applyFilters();
-      },
-      
-      updatePagination() {
-        const start = 0;
-        const end = this.currentPage * this.productsPerPage;
-        this.paginatedProducts = this.filteredProducts.slice(start, end);
-        this.renderProducts();
-      },
-      
-      loadMore() {
-        this.loading = true;
-        setTimeout(() => {
-          this.currentPage++;
-          this.updatePagination();
-          this.loading = false;
-        }, 500);
-      },
-      
-      renderProducts() {
-        // This would typically render product cards
-        // For now, we'll use a placeholder
-        this.paginatedProducts = this.paginatedProducts.map(product => ({
-          ...product,
-          html: `<div class="card-premium p-4"><h3 class="font-semibold">${product.title}</h3><p class="text-slate-600">${Shopify.formatMoney(product.price_min)}</p></div>`
-        }));
+        // Simple initialization for basic functionality
+        console.log('Collection page initialized');
       }
     };
   }

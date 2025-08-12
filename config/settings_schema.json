@@ -1,6 +1,247 @@
 [
   {
-    "name": "Analytics & Tracking",
+    "name": "🎨 Brand & Design",
+    "settings": [
+      {
+        "type": "header",
+        "content": "🏷️ Brand Identity"
+      },
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Brand Name",
+        "default": "PeakWares",
+        "info": "Your store's brand name"
+      },
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Brand Tagline",
+        "default": "Premium Lifestyle Collection",
+        "info": "Short description of your brand"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo Image",
+        "info": "Upload your logo (recommended: 200x60px)"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo width",
+        "min": 100,
+        "max": 300,
+        "step": 10,
+        "default": 150,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "🎨 Color Scheme"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Brand Color",
+        "default": "#f59e0b",
+        "info": "Main brand color for buttons and accents"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Color",
+        "default": "#1e293b",
+        "info": "Secondary color for text and backgrounds"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent Color",
+        "default": "#d97706",
+        "info": "Accent color for highlights"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background Color",
+        "default": "#ffffff",
+        "info": "Main background color"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text Color",
+        "default": "#1f2937",
+        "info": "Main text color"
+      },
+      {
+        "type": "header",
+        "content": "✍️ Typography"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "default": "assistant_n4",
+        "info": "Font for headings and titles"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body Font",
+        "default": "assistant_n4",
+        "info": "Font for body text"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading Size",
+        "options": [
+          {"value": "small", "label": "Small"},
+          {"value": "medium", "label": "Medium"},
+          {"value": "large", "label": "Large"},
+          {"value": "extra-large", "label": "Extra Large"}
+        ],
+        "default": "large"
+      }
+    ]
+  },
+  {
+    "name": "🛒 Store Features",
+    "settings": [
+      {
+        "type": "header",
+        "content": "🚚 Shipping & Returns"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "default": "50",
+        "info": "Minimum order amount for free shipping"
+      },
+      {
+        "type": "text",
+        "id": "return_policy_days",
+        "label": "Return policy days",
+        "default": "30",
+        "info": "Number of days for returns"
+      },
+      {
+        "type": "textarea",
+        "id": "shipping_info",
+        "label": "Shipping information",
+        "default": "Free shipping on orders over $50. Express delivery available.",
+        "info": "Displayed in cart and product pages"
+      },
+      {
+        "type": "header",
+        "content": "💳 Payment & Security"
+      },
+      {
+        "type": "text",
+        "id": "payment_methods",
+        "label": "Accepted payment methods",
+        "default": "Visa, Mastercard, PayPal, Apple Pay",
+        "info": "List of payment methods you accept"
+      },
+      {
+        "type": "textarea",
+        "id": "security_message",
+        "label": "Security message",
+        "default": "Your payment information is processed securely with 256-bit SSL encryption.",
+        "info": "Security assurance message"
+      },
+      {
+        "type": "header",
+        "content": "📞 Customer Support"
+      },
+      {
+        "type": "text",
+        "id": "support_hours",
+        "label": "Support hours",
+        "default": "Monday-Friday: 9AM-6PM EST",
+        "info": "Your customer support hours"
+      },
+      {
+        "type": "text",
+        "id": "response_time",
+        "label": "Response time",
+        "default": "Within 24 hours",
+        "info": "How quickly you respond to inquiries"
+      }
+    ]
+  },
+  {
+    "name": "📱 Social Media & Contact",
+    "settings": [
+      {
+        "type": "header",
+        "content": "📞 Contact Information"
+      },
+      {
+        "type": "text",
+        "id": "store_phone",
+        "label": "Phone Number",
+        "info": "Your customer service phone number"
+      },
+      {
+        "type": "text",
+        "id": "store_email",
+        "label": "Email Address",
+        "info": "Your customer service email"
+      },
+      {
+        "type": "text",
+        "id": "store_address",
+        "label": "Store Address",
+        "info": "Your business address (for footer)"
+      },
+      {
+        "type": "header",
+        "content": "📱 Social Media Links"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL",
+        "info": "Your Facebook page URL"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram URL",
+        "info": "Your Instagram profile URL"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter URL",
+        "info": "Your Twitter profile URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube URL",
+        "info": "Your YouTube channel URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL",
+        "info": "Your TikTok profile URL"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest URL",
+        "info": "Your Pinterest profile URL"
+      }
+    ]
+  },
+  {
+    "name": "📈 Analytics & Tracking",
     "settings": [
       {
         "type": "header",
@@ -154,104 +395,203 @@
     ]
   },
   {
-    "name": "Conversion Optimization",
+    "name": "🚀 Conversion Optimization",
     "settings": [
       {
         "type": "header",
-        "content": "Urgency Features"
+        "content": "🔥 Urgency & Promotions"
       },
       {
         "type": "checkbox",
         "id": "enable_urgency_banner",
-        "label": "Enable urgency banner",
-        "default": true
+        "label": "Show urgency banner",
+        "default": true,
+        "info": "Display promotional banner at top of site"
       },
       {
         "type": "text",
         "id": "urgency_banner_text",
         "label": "Urgency banner text",
-        "default": "🔥 Limited Time: Free Shipping on Orders Over $50!"
+        "default": "🔥 Limited Time: Free Shipping on Orders Over $50!",
+        "info": "Text shown in the urgency banner"
+      },
+      {
+        "type": "color",
+        "id": "urgency_banner_bg",
+        "label": "Banner background color",
+        "default": "#dc2626",
+        "info": "Background color of urgency banner"
+      },
+      {
+        "type": "url",
+        "id": "urgency_banner_link",
+        "label": "Banner link URL (optional)",
+        "info": "Where to redirect when banner is clicked"
       },
       {
         "type": "header",
-        "content": "Exit Intent"
+        "content": "🛍️ Cart & Checkout"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer",
+        "label": "Enable cart drawer",
+        "default": true,
+        "info": "Show cart as slide-out drawer instead of page"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_add",
+        "label": "Enable quick add buttons",
+        "default": true,
+        "info": "Allow adding products to cart from collection pages"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_view",
+        "label": "Enable quick view modals",
+        "default": true,
+        "info": "Allow viewing product details in popup"
+      },
+      {
+        "type": "text",
+        "id": "cart_goal_amount",
+        "label": "Cart goal amount",
+        "default": "100",
+        "info": "Amount needed for free shipping/bonus"
+      },
+      {
+        "type": "text",
+        "id": "cart_goal_message",
+        "label": "Cart goal message",
+        "default": "Add {{amount}} more for FREE shipping!",
+        "info": "Message shown in cart (use {{amount}} for dynamic amount)"
+      },
+      {
+        "type": "header",
+        "content": "⭐ Social Proof"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_proof",
+        "label": "Show social proof notifications",
+        "default": true,
+        "info": "Display recent purchase notifications"
+      },
+      {
+        "type": "number",
+        "id": "social_proof_delay",
+        "label": "Display delay (seconds)",
+        "min": 3,
+        "max": 15,
+        "default": 5,
+        "info": "How long to wait before showing notifications"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_review_stars",
+        "label": "Show review stars on products",
+        "default": true,
+        "info": "Display star ratings on product cards"
+      },
+      {
+        "type": "text",
+        "id": "default_review_count",
+        "label": "Default review count",
+        "default": "124",
+        "info": "Default number of reviews to show"
+      },
+      {
+        "type": "header",
+        "content": "💡 Exit Intent & Popups"
       },
       {
         "type": "checkbox",
         "id": "enable_exit_intent",
         "label": "Enable exit intent popup",
-        "default": true
+        "default": false,
+        "info": "Show popup when user tries to leave"
       },
       {
         "type": "text",
-        "id": "exit_intent_discount_code",
-        "label": "Exit intent discount code",
-        "default": "WELCOME10"
+        "id": "exit_intent_heading",
+        "label": "Exit popup heading",
+        "default": "Wait! Don't miss out!",
+        "info": "Main heading for exit intent popup"
       },
       {
-        "type": "number",
-        "id": "exit_intent_discount_percent",
-        "label": "Discount percentage",
-        "default": 10
+        "type": "text",
+        "id": "exit_intent_discount",
+        "label": "Discount offer",
+        "default": "10% OFF",
+        "info": "Discount percentage or amount"
       },
       {
-        "type": "header",
-        "content": "Social Proof"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_social_proof",
-        "label": "Enable social proof notifications",
-        "default": true
-      },
-      {
-        "type": "number",
-        "id": "social_proof_delay",
-        "label": "Social proof display delay (seconds)",
-        "default": 5
+        "type": "text",
+        "id": "exit_intent_code",
+        "label": "Discount code",
+        "default": "WELCOME10",
+        "info": "Discount code to provide"
       }
     ]
   },
   {
-    "name": "Typography & Colors",
+    "name": "⚙️ Performance & SEO",
     "settings": [
       {
         "type": "header",
-        "content": "Brand Colors"
+        "content": "🚀 Performance"
       },
       {
-        "type": "color",
-        "id": "color_primary",
-        "label": "Primary Color",
-        "default": "#f59e0b"
+        "type": "checkbox",
+        "id": "enable_lazy_loading",
+        "label": "Enable lazy loading",
+        "default": true,
+        "info": "Load images only when needed (improves speed)"
       },
       {
-        "type": "color",
-        "id": "color_secondary",
-        "label": "Secondary Color",
-        "default": "#1e293b"
+        "type": "checkbox",
+        "id": "enable_critical_css",
+        "label": "Enable critical CSS",
+        "default": true,
+        "info": "Optimize CSS delivery for faster loading"
       },
       {
-        "type": "color",
-        "id": "color_accent",
-        "label": "Accent Color",
-        "default": "#d97706"
+        "type": "select",
+        "id": "image_quality",
+        "label": "Image quality",
+        "options": [
+          {"value": "low", "label": "Low (faster loading)"},
+          {"value": "medium", "label": "Medium (balanced)"},
+          {"value": "high", "label": "High (best quality)"}
+        ],
+        "default": "medium",
+        "info": "Balance between image quality and loading speed"
       },
       {
         "type": "header",
-        "content": "Typography"
+        "content": "🔍 SEO Settings"
       },
       {
-        "type": "font_picker",
-        "id": "font_heading",
-        "label": "Heading Font",
-        "default": "assistant_n4"
+        "type": "textarea",
+        "id": "seo_default_description",
+        "label": "Default meta description",
+        "default": "Premium lifestyle products curated for the discerning individual. Experience luxury at PeakWares.",
+        "info": "Used when no specific description is set"
       },
       {
-        "type": "font_picker",
-        "id": "font_body",
-        "label": "Body Font",
-        "default": "assistant_n4"
+        "type": "text",
+        "id": "seo_default_keywords",
+        "label": "Default keywords",
+        "default": "premium products, luxury lifestyle, exclusive collections, high-end shopping",
+        "info": "Comma-separated list of keywords"
+      },
+      {
+        "type": "textarea",
+        "id": "seo_organization_description",
+        "label": "Business description",
+        "default": "PeakWares is a premium lifestyle brand offering curated collections of high-quality products for discerning customers worldwide.",
+        "info": "Used in structured data for search engines"
       }
     ]
   }

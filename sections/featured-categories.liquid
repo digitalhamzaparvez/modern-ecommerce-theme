@@ -115,19 +115,217 @@
 
 {% schema %}
 {
-  "name": "Featured Categories",
+  "name": "🛍️ Featured Categories",
+  "tag": "section",
+  "class": "featured-categories-section",
   "settings": [
+    {
+      "type": "header",
+      "content": "📝 Section Content"
+    },
     {
       "type": "text",
       "id": "heading",
-      "label": "Section Heading",
-      "default": "Shop By Your Specific Lifestyle Need"
+      "label": "Section heading",
+      "default": "Shop By Your Specific Lifestyle Need",
+      "info": "Main heading for the categories section"
     },
     {
       "type": "textarea",
       "id": "description",
-      "label": "Section Description",
-      "default": "Discover curated collections designed to enhance every aspect of your premium lifestyle."
+      "label": "Section description",
+      "default": "Discover curated collections designed to enhance every aspect of your premium lifestyle.",
+      "info": "Descriptive text below the heading"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Section Style"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff",
+      "info": "Background color for the section"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1f2937",
+      "info": "Color for headings and text"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 40,
+      "max": 120,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "📱 Layout Options"
+    },
+    {
+      "type": "select",
+      "id": "categories_per_row",
+      "label": "Categories per row (desktop)",
+      "options": [
+        {"value": "2", "label": "2 columns"},
+        {"value": "3", "label": "3 columns"},
+        {"value": "4", "label": "4 columns"}
+      ],
+      "default": "3",
+      "info": "How many categories to show per row on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_button",
+      "label": "Show 'View All' button",
+      "default": true,
+      "info": "Display a button to view all categories"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "'View All' button URL",
+      "default": "/collections",
+      "info": "Where the 'View All' button should link"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "'View All' button text",
+      "default": "View All Categories",
+      "info": "Text for the 'View All' button"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "🏷️ Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category title",
+          "default": "Luxury Lifestyle",
+          "info": "Name of the category"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Category description",
+          "default": "Premium products for elevated daily living",
+          "info": "Short description of the category"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Category URL",
+          "default": "/collections/luxury-lifestyle",
+          "info": "Link to the collection page"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category image",
+          "info": "Image for the category (recommended: 400x400px)"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Category icon (emoji)",
+          "default": "✨",
+          "info": "Emoji to display with the category"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Card background color",
+          "default": "#ffffff",
+          "info": "Background color for this category card"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent color",
+          "default": "#f59e0b",
+          "info": "Color for hover effects and accents"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Mark as featured",
+          "default": false,
+          "info": "Highlight this category with special styling"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Categories",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Luxury Lifestyle",
+            "description": "Premium products for elevated daily living",
+            "url": "/collections/luxury-lifestyle",
+            "icon": "✨"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Executive Essentials",
+            "description": "Professional-grade items for success",
+            "url": "/collections/executive-essentials",
+            "icon": "💼"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Premium Wellness",
+            "description": "Health and wellness products of distinction",
+            "url": "/collections/premium-wellness",
+            "icon": "🌿"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Exclusive Tech",
+            "description": "Cutting-edge technology and innovation",
+            "url": "/collections/exclusive-tech",
+            "icon": "📱"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Limited Edition",
+            "description": "Rare finds and collector's pieces",
+            "url": "/collections/limited-edition",
+            "icon": "💎"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Shop All",
+            "description": "Browse our complete premium collection",
+            "url": "/collections/all",
+            "icon": "🛍️",
+            "featured": true
+          }
+        }
+      ]
     }
   ]
 }

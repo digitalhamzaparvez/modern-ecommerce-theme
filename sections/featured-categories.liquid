@@ -1,0 +1,23 @@
+<section class="py-16 bg-premium-light">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl lg:text-4xl font-bold text-premium mb-4">Shop by Category</h2>
+      <p class="text-slate-600 text-lg">Explore our premium collections</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {% assign categories = 'health-wellness,pet-products,home-garden,beauty-care,tech-accessories' | split: ',' %}
+      {% for category in categories %}
+        <a href="/collections/{{ category }}" class="group">
+          <div class="card-premium p-6 text-center group-hover:scale-105 transition-transform duration-300">
+            <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-premium capitalize">{{ category | replace: '-', ' ' }}</h3>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

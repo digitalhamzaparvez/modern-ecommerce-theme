@@ -1,25 +1,38 @@
 {% assign blog_handle = 'news' %}
 {% assign blog_obj = blogs[blog_handle] %}
 {% if blog_obj and blog_obj.articles_count > 0 %}
-<section>
-  <div class="flex items-center justify-between mb-4">
-    <h2 class="text-2xl font-semibold">From the blog</h2>
-    <a href="{{ blog_obj.url }}" class="text-blue-600 hover:underline">View all</a>
-  </div>
-  <div class="grid gap-6 md:grid-cols-3">
-    {% for article in blog_obj.articles limit: 3 %}
-      <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-        <a href="{{ article.url }}" class="block">
-          {% if article.image %}
-            <img src="{{ article.image | img_url: '720x' }}" alt="{{ article.title | escape }}" class="w-full h-44 object-cover">
-          {% endif %}
-          <div class="p-4">
-            <h3 class="font-medium line-clamp-2">{{ article.title }}</h3>
-            <p class="mt-1 text-sm text-gray-600 line-clamp-2">{{ article.excerpt | strip_html }}</p>
-          </div>
-        </a>
-      </article>
-    {% endfor %}
+<section class="py-16 bg-premium-light">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="flex items-center justify-between mb-12">
+      <div>
+        <h2 class="text-3xl lg:text-4xl font-bold text-premium mb-2">Latest Insights</h2>
+        <p class="text-slate-600">Discover tips, trends, and stories</p>
+      </div>
+      <a href="{{ blog_obj.url }}" class="btn-premium-outline">
+        View All Posts
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      {% for article in blog_obj.articles limit: 3 %}
+        <article class="card-premium overflow-hidden group">
+          <a href="{{ article.url }}" class="block">
+            {% if article.image %}
+              <div class="aspect-[4/3] overflow-hidden">
+                <img src="{{ article.image | img_url: '900x' }}" alt="{{ article.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            {% endif %}
+            <div class="p-6">
+              <p class="text-sm text-amber-600 font-medium mb-2">{{ article.published_at | date: "%B %d, %Y" }}</p>
+              <h3 class="font-semibold text-premium line-clamp-2 mb-3 group-hover:text-amber-600 transition-colors">{{ article.title }}</h3>
+              <p class="text-slate-600 line-clamp-2 text-sm">{{ article.excerpt | strip_html }}</p>
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endif %}
